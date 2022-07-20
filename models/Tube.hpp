@@ -1,0 +1,54 @@
+/*************************************************************************
+【文件名】Tube.hpp
+【功能模块和目的】试管类声明
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-20
+【版权信息】以下代码由唐春洋根据清华大学自动化系2022年暑期“面向对象程序设计训练”课程要求独立编写，
+    开发者唐春洋(tangcy21@mails.tsinghua.edu.cn)声明放弃对修改部分的任何版权诉求，任何使用者可做出任何修改、用于任何目的
+    本代码遵守 CC 4.0 BY-SA 版权协议
+    CC BY-SA 4.0 是一种许可协议，赋予遵守者两项重要权利：
+    一、共享的权利。允许通过任何媒介和任何形式复制、发行作品。
+    二、改编的权利。允许二次加工、转换和基于作品进行创作，不限制用途，甚至是商业应用。
+【更改记录】
+    2022-07-20 由唐春洋创建该文件
+*************************************************************************/
+
+#ifndef Tube_hpp
+#define Tube_hpp
+
+#include "User.hpp"
+#include <memory>
+#include <string>
+#include <vector>
+
+// 定义用户智能指针的别名
+using pUser = std::shared_ptr<User>;
+
+/*************************************************************************
+【类名】Tube
+【功能】表示试管的类
+【接口说明】
+    构造函数：Tube(std::string SerialNumber, unsigned
+MaxCapasity)用序列号与最大容量初始化试管
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-07-20
+【更改记录】
+     2022-07-20 由唐春洋创建该类
+*************************************************************************/
+class Tube {
+public:
+    // 使用序列号构造试管
+    Tube(std::string SerialNumber, unsigned MaxCapasity = 10)
+        : m_SerialNumber(SerialNumber), m_iResult(-1),
+          MAX_CAPASITY(MaxCapasity) {}
+
+private:
+    //试管编号
+    std::string m_SerialNumber;
+    //试管类型
+    int m_iResult;
+    //试管包含的用户
+    std::vector<pUser> m_Users;
+    // 最大用户数量
+    const unsigned MAX_CAPASITY;
+};
+
+#endif
