@@ -14,16 +14,15 @@
 *************************************************************************/
 
 #include "Time.hpp"
-#include <string>
-#include <sstream>
 #include <iomanip>
+#include <sstream>
 #include <stdexcept>
+#include <string>
 
 // 类静态成员初始化，默认24小时制表示
 bool Time::Is24Hours = true;
 // 类静态成员初始化，默认格式化输出
 bool Time::regular_format = true;
-
 
 /*************************************************************************
 【函数名称】Time::Time
@@ -34,10 +33,9 @@ bool Time::regular_format = true;
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-Time::Time(unsigned int Hour, unsigned int Minute, unsigned int Second) : Hour(m_Hour), Minute(m_Minute), Second(m_Second)
-{
-    if (!Set(Hour, Minute, Second))
-    {
+Time::Time(unsigned int Hour, unsigned int Minute, unsigned int Second)
+    : Hour(m_Hour), Minute(m_Minute), Second(m_Second) {
+    if (!Set(Hour, Minute, Second)) {
         Set(0, 0, 0);
     }
 }
@@ -51,10 +49,8 @@ Time::Time(unsigned int Hour, unsigned int Minute, unsigned int Second) : Hour(m
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-Time::Time(const Time &src) : Hour(m_Hour), Minute(m_Minute), Second(m_Second)
-{
-    if (!IsValidTime(src))
-    {
+Time::Time(const Time& src) : Hour(m_Hour), Minute(m_Minute), Second(m_Second) {
+    if (!IsValidTime(src)) {
         throw std::range_error("Invalid time");
     }
     m_Hour = src.m_Hour;
@@ -71,10 +67,9 @@ Time::Time(const Time &src) : Hour(m_Hour), Minute(m_Minute), Second(m_Second)
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-bool Time::IsValidTime(unsigned int Hour, unsigned int Minute, unsigned int Second)
-{
-    if (Hour > 23 || Minute > 59 || Second > 59)
-    {
+bool Time::IsValidTime(unsigned int Hour, unsigned int Minute,
+                       unsigned int Second) {
+    if (Hour > 23 || Minute > 59 || Second > 59) {
         return false;
     }
     return true;
@@ -89,8 +84,7 @@ bool Time::IsValidTime(unsigned int Hour, unsigned int Minute, unsigned int Seco
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-bool Time::IsValidTime(const Time &time)
-{
+bool Time::IsValidTime(const Time& time) {
     return IsValidTime(time.m_Hour, time.m_Minute, time.m_Second);
 }
 
@@ -103,10 +97,7 @@ bool Time::IsValidTime(const Time &time)
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-bool Time::IsValid() const
-{
-    return IsValidTime(m_Hour, m_Minute, m_Second);
-}
+bool Time::IsValid() const { return IsValidTime(m_Hour, m_Minute, m_Second); }
 
 /*************************************************************************
 【函数名称】Time::Set
@@ -117,8 +108,7 @@ bool Time::IsValid() const
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-bool Time::Set(unsigned int Hour, unsigned int Miniute, unsigned int Second)
-{
+bool Time::Set(unsigned int Hour, unsigned int Miniute, unsigned int Second) {
     return SetHour(Hour) && SetMinute(Miniute) && SetSecond(Second);
 }
 
@@ -131,8 +121,7 @@ bool Time::Set(unsigned int Hour, unsigned int Miniute, unsigned int Second)
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-bool Time::SetHour(unsigned int Hour)
-{
+bool Time::SetHour(unsigned int Hour) {
     bool IsRight = Hour < 24;
     m_Hour = IsRight ? Hour : m_Hour;
     return IsRight;
@@ -147,8 +136,7 @@ bool Time::SetHour(unsigned int Hour)
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-bool Time::SetMinute(unsigned int Minute)
-{
+bool Time::SetMinute(unsigned int Minute) {
     bool IsRight = Minute < 60;
     m_Minute = IsRight ? Minute : m_Minute;
     return IsRight;
@@ -163,8 +151,7 @@ bool Time::SetMinute(unsigned int Minute)
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-bool Time::SetSecond(unsigned int Second)
-{
+bool Time::SetSecond(unsigned int Second) {
     bool IsRight = Second < 60;
     m_Second = IsRight ? Second : m_Second;
     return IsRight;
@@ -179,10 +166,7 @@ bool Time::SetSecond(unsigned int Second)
 【更改记录】
     2022-6-29 由唐春洋完善了功能的代码实现
 *************************************************************************/
-void Time::Set24Hours(bool Is24Hours)
-{
-    Time::Is24Hours = Is24Hours;
-}
+void Time::Set24Hours(bool Is24Hours) { Time::Is24Hours = Is24Hours; }
 
 /*************************************************************************
 【函数名称】Time::SetFormat
@@ -193,8 +177,7 @@ void Time::Set24Hours(bool Is24Hours)
 【更改记录】
     2022-7-20 由唐春洋完善了功能的代码实现
 *************************************************************************/
-void Time::SetFormat(bool IsRegularFormat)
-{
+void Time::SetFormat(bool IsRegularFormat) {
     Time::regular_format = IsRegularFormat;
 }
 
@@ -207,10 +190,8 @@ void Time::SetFormat(bool IsRegularFormat)
 【更改记录】
     2022-7-20 由唐春洋完善了功能的代码实现
 *************************************************************************/
-unsigned int Time::Seconds() const
-{
-    if (!IsValid())
-    {
+unsigned int Time::Seconds() const {
+    if (!IsValid()) {
         throw std::range_error("Invalid time");
     }
     return m_Hour * 3600u + m_Minute * 60u + m_Second;
@@ -225,30 +206,26 @@ unsigned int Time::Seconds() const
 【更改记录】
     2022-7-20 由唐春洋完善了功能的代码实现
 *************************************************************************/
-std::string Time::GetFormatString() const
-{
-    if (!IsValid())
-    {
+std::string Time::GetFormatString() const {
+    if (!IsValid()) {
         throw std::range_error("Invalid time");
     }
     std::ostringstream ostr;
     unsigned int Temp_Hour;
-    if(Is24Hours)
-    {
+    if (Is24Hours) {
         Temp_Hour = m_Hour;
-    }
-    else
-    {
-        Temp = m_Hour < 12 ? m_Hour : m_Hour - 12;
+    } else {
+        Temp_Hour = m_Hour < 12 ? m_Hour : m_Hour - 12;
     }
 
-    if (regular_format)
-    {
-        ostr  << std::setw(2) << std::setfill('0')<< Temp_Hour << std::setw(2) << std::setfill('0')<< m_Minute << std::setw(2)<< std::setfill('0') << m_Second;
-    }
-    else
-    {
-       ostr << std::setfill('0') << std::setw(2) << Temp_Hour << ":" << std::setfill('0') << std::setw(2) << m_Minute << ":" << std::setfill('0') << std::setw(2) << m_Second;
+    if (regular_format) {
+        ostr << std::setw(2) << std::setfill('0') << Temp_Hour << std::setw(2)
+             << std::setfill('0') << m_Minute << std::setw(2)
+             << std::setfill('0') << m_Second;
+    } else {
+        ostr << std::setfill('0') << std::setw(2) << Temp_Hour << ":"
+             << std::setfill('0') << std::setw(2) << m_Minute << ":"
+             << std::setfill('0') << std::setw(2) << m_Second;
     }
     return ostr.str();
 }
@@ -262,14 +239,11 @@ std::string Time::GetFormatString() const
 【更改记录】
     2022-7-20 由唐春洋完善了功能的代码实现
 *************************************************************************/
-Time &Time::operator=(const Time &src)
-{
-    if (!(IsValidTime(src) && IsValid()))
-    {
+Time& Time::operator=(const Time& src) {
+    if (!(IsValidTime(src) && IsValid())) {
         throw std::range_error("Invalid time");
     }
-    if (this != &src)
-    {
+    if (this != &src) {
         m_Hour = src.m_Hour;
         m_Minute = src.m_Minute;
         m_Second = src.m_Second;

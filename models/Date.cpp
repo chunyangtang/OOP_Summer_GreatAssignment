@@ -14,11 +14,11 @@
 *************************************************************************/
 
 #include "Date.hpp"
-#include <string>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
-#include <iomanip>
 #include <stdexcept>
+#include <string>
 
 // 类静态成员初始化，表示默认最大年份为9999年
 unsigned int Date::maxium_Year = 9999;
@@ -28,7 +28,8 @@ unsigned int Date::minimum_Year = 1900;
 // 类静态成员初始化，表示日期默认输出格式是标准的
 bool Date::regular_format = true;
 // 类静态成员初始化，表示非闰年时对应月份的天数
-const unsigned int Date::days_in_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+const unsigned int Date::days_in_month[12] = {31, 28, 31, 30, 31, 30,
+                                              31, 31, 30, 31, 30, 31};
 
 /*************************************************************************
 【函数名称】Date::Date
@@ -40,18 +41,15 @@ const unsigned int Date::days_in_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30
     2022-6-29 由唐春洋完善了类中功能的代码实现
     2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
 *************************************************************************/
-Date::Date(unsigned int Year, unsigned int Miniute, unsigned int Day) : Year(m_Year), Month(m_Month), Day(m_Day)
-{
-    if (!Set(Year, Miniute, Day))
-    {
+Date::Date(unsigned int Year, unsigned int Miniute, unsigned int Day)
+    : Year(m_Year), Month(m_Month), Day(m_Day) {
+    if (!Set(Year, Miniute, Day)) {
         Set(1900, 1, 1);
     }
 }
 
-Date::Date(const Date &src) : Year(m_Year), Month(m_Month), Day(m_Day)
-{
-    if (!IsValidDate(src))
-    {
+Date::Date(const Date& src) : Year(m_Year), Month(m_Month), Day(m_Day) {
+    if (!IsValidDate(src)) {
         throw std::range_error("Invalid date");
     }
     m_Year = src.m_Year;
@@ -60,14 +58,10 @@ Date::Date(const Date &src) : Year(m_Year), Month(m_Month), Day(m_Day)
 }
 
 // Setters
-bool Date::Set(unsigned int Year, unsigned int Month, unsigned int Day)
-{
-    if (!IsValidDate(Year, Month, Day))
-    {
+bool Date::Set(unsigned int Year, unsigned int Month, unsigned int Day) {
+    if (!IsValidDate(Year, Month, Day)) {
         return false;
-    }
-    else
-    {
+    } else {
         m_Year = Year;
         m_Month = Month;
         m_Day = Day;
@@ -75,144 +69,107 @@ bool Date::Set(unsigned int Year, unsigned int Month, unsigned int Day)
     }
 }
 
-bool Date::SetRange(unsigned int minimum_Year, unsigned int maximum_Year)
-{
-    if (minimum_Year > maximum_Year)
-    {
+bool Date::SetRange(unsigned int minimum_Year, unsigned int maximum_Year) {
+    if (minimum_Year > maximum_Year) {
         return false;
-    }
-    else
-    {
+    } else {
         Date::minimum_Year = minimum_Year;
         Date::maxium_Year = maximum_Year;
         return true;
     }
 }
 
-void Date::SetFormat(bool is_regular_format)
-{
+void Date::SetFormat(bool is_regular_format) {
     Date::regular_format = is_regular_format;
 }
 
 // Checkers
-bool Date::IsLeapYear(unsigned int Year)
-{
-    if (Year < minimum_Year || Year > maxium_Year)
-    {
+bool Date::IsLeapYear(unsigned int Year) {
+    if (Year < minimum_Year || Year > maxium_Year) {
         throw std::range_error("Invalid year");
     }
     return (Year % 4 == 0) && (Year % 100 != 0 || Year % 400 == 0);
 }
 
-bool Date::IsLeapYear(const Date &src)
-{
-    if (!IsValidDate(src))
-    {
+bool Date::IsLeapYear(const Date& src) {
+    if (!IsValidDate(src)) {
         throw std::range_error("Invalid date");
     }
     return IsLeapYear(src.m_Year);
 }
 
-bool Date::IsValidDate(unsigned int Year, unsigned int Month, unsigned int Day)
-{
-    if (Year < minimum_Year || Year > maxium_Year)
-    {
+bool Date::IsValidDate(unsigned int Year, unsigned int Month,
+                       unsigned int Day) {
+    if (Year < minimum_Year || Year > maxium_Year) {
         return false;
     }
-    if (Month < 1 || Month > 12)
-    {
+    if (Month < 1 || Month > 12) {
         return false;
     }
-    if (Day < 1 || Day > 31)
-    {
+    if (Day < 1 || Day > 31) {
         return false;
     }
-    if (Month == 2)
-    {
-        if (Date::IsLeapYear(Year))
-        {
+    if (Month == 2) {
+        if (Date::IsLeapYear(Year)) {
             return Day <= 29;
-        }
-        else
-        {
+        } else {
             return Day <= 28;
         }
-    }
-    else if (Month == 4 || Month == 6 || Month == 9 || Month == 11)
-    {
+    } else if (Month == 4 || Month == 6 || Month == 9 || Month == 11) {
         return Day <= 30;
-    }
-    else
-    {
+    } else {
         return true;
     }
 }
 
-bool Date::IsValidDate(const Date &date)
-{
+bool Date::IsValidDate(const Date& date) {
     return IsValidDate(date.m_Year, date.m_Month, date.m_Day);
 }
 
-bool Date::IsLeapYear() const
-{
-    if (!IsValid())
-    {
+bool Date::IsLeapYear() const {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     return IsLeapYear(m_Year);
 }
 
-bool Date::IsValid() const
-{
-    return IsValidDate(m_Year, m_Month, m_Day);
-}
+bool Date::IsValid() const { return IsValidDate(m_Year, m_Month, m_Day); }
 
 // Getters
-unsigned int Date::DaysInYear() const
-{
-    if (!IsValid())
-    {
+unsigned int Date::DaysInYear() const {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     unsigned int days = 0;
-    for (int i = 1; i < m_Month; i++)
-    {
+    for (int i = 1; i < m_Month; i++) {
         days += days_in_month[i - 1];
-        if (i == 2 && Date::IsLeapYear(m_Year))
-        {
+        if (i == 2 && Date::IsLeapYear(m_Year)) {
             days++;
         }
     }
     return days + m_Day;
 }
 
-std::string Date::GetFormatString() const
-{
-    if (!IsValid())
-    {
+std::string Date::GetFormatString() const {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     std::ostringstream ostr;
-    if (regular_format)
-    {
-        ostr << m_Year << std::setw(2) << std::setfill('0') << m_Month << std::setw(2) << std::setfill('0') << m_Day;
-    }
-    else
-    {
+    if (regular_format) {
+        ostr << m_Year << std::setw(2) << std::setfill('0') << m_Month
+             << std::setw(2) << std::setfill('0') << m_Day;
+    } else {
         ostr << m_Year << "-" << m_Month << "-" << m_Day;
     }
     return ostr.str();
 }
 
 // Operators
-Date &Date::operator=(const Date &src)
-{
-    if (!(IsValidDate(src) && IsValid()))
-    {
+Date& Date::operator=(const Date& src) {
+    if (!(IsValidDate(src) && IsValid())) {
         throw std::range_error("Invalid date");
     }
-    if (this != &src)
-    {
+    if (this != &src) {
         m_Year = src.m_Year;
         m_Month = src.m_Month;
         m_Day = src.m_Day;
@@ -220,100 +177,78 @@ Date &Date::operator=(const Date &src)
     return *this;
 }
 
-Date &Date::operator+(const int &days) const
-{
-    if (!IsValid())
-    {
+Date& Date::operator+(const int& days) const {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     Date temp(*this);
     int temp_days = temp.DaysInYear() + days;
     temp.DaysToDate(temp_days);
-    if (!IsValidDate(temp))
-    {
+    if (!IsValidDate(temp)) {
         throw std::range_error("Invalid date");
     }
     return temp;
 }
 
-Date &Date::operator+=(const int &days)
-{
-    if (!IsValid())
-    {
+Date& Date::operator+=(const int& days) {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     int temp_days = DaysInYear() + days;
     DaysToDate(temp_days);
-    if (!IsValid())
-    {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     return *this;
 }
 
-Date &Date::operator++()
-{
-    if (!IsValid())
-    {
+Date& Date::operator++() {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     Date temp(*this);
     *this += 1;
-    if (!IsValid())
-    {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     return temp;
 }
 
-Date &Date::operator++(int)
-{
-    if (!IsValid())
-    {
+Date& Date::operator++(int) {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     *this += 1;
-    if (!IsValid())
-    {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     return *this;
 }
 
-bool Date::operator!=(const Date &src) const
-{
-    if (!(IsValidDate(src) && IsValid()))
-    {
+bool Date::operator!=(const Date& src) const {
+    if (!(IsValidDate(src) && IsValid())) {
         throw std::range_error("Invalid date");
     }
     return !(*this == src);
 }
 
-bool Date::operator==(const Date &src) const
-{
-    if (!(IsValidDate(src) && IsValid()))
-    {
+bool Date::operator==(const Date& src) const {
+    if (!(IsValidDate(src) && IsValid())) {
         throw std::range_error("Invalid date");
     }
     return m_Year == src.m_Year && m_Month == src.m_Month && m_Day == src.m_Day;
 }
 
-int Date::operator-(const Date &src) const
-{
-    if (!(IsValidDate(src) && IsValid()))
-    {
+int Date::operator-(const Date& src) const {
+    if (!(IsValidDate(src) && IsValid())) {
         throw std::range_error("Invalid date");
     }
     int days = 0;
-    for (int i = src.m_Year; i != m_Year;)
-    {
-        if (m_Year > src.m_Year)
-        {
+    for (int i = src.m_Year; i != m_Year;) {
+        if (m_Year > src.m_Year) {
             days += IsLeapYear(i) ? 366 : 365;
             i++;
-        }
-        else
-        {
+        } else {
             days -= IsLeapYear(i - 1) ? 366 : 365;
             i--;
         }
@@ -321,137 +256,97 @@ int Date::operator-(const Date &src) const
     return days + DaysInYear() - src.DaysInYear();
 }
 
-Date &Date::operator-(const int &days) const
-{
-    if (!IsValid())
-    {
+Date& Date::operator-(const int& days) const {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
-    if (!IsValidDate(*this + (-days)))
-    {
+    if (!IsValidDate(*this + (-days))) {
         throw std::range_error("Invalid date");
     }
     return *this + (-days);
 }
 
-Date &Date::operator-=(const int &days)
-{
-    if (!IsValid())
-    {
+Date& Date::operator-=(const int& days) {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     *this += (-days);
-    if (!IsValid())
-    {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     return *this;
 }
 
-Date &Date::operator--()
-{
-    if (!IsValid())
-    {
+Date& Date::operator--() {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     Date temp = *this;
     *this -= 1;
-    if (!IsValid())
-    {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     return temp;
 }
 
-Date &Date::operator--(int)
-{
-    if (!IsValid())
-    {
+Date& Date::operator--(int) {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     *this -= 1;
-    if (!IsValid())
-    {
+    if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
     return *this;
 }
 
-bool Date::operator<(const Date &src) const
-{
-    if (!(IsValid() && IsValidDate(src)))
-    {
+bool Date::operator<(const Date& src) const {
+    if (!(IsValid() && IsValidDate(src))) {
         throw std::range_error("Invalid date");
     }
-    if (m_Year < src.m_Year)
-    {
+    if (m_Year < src.m_Year) {
         return true;
-    }
-    else if (m_Year == src.m_Year)
-    {
-        if (m_Month < src.m_Month)
-        {
+    } else if (m_Year == src.m_Year) {
+        if (m_Month < src.m_Month) {
             return true;
-        }
-        else if (m_Month == src.m_Month)
-        {
+        } else if (m_Month == src.m_Month) {
             return m_Day < src.m_Day;
-        }
-        else
-        {
+        } else {
             return false;
         }
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-bool Date::operator>(const Date &src) const
-{
-    if (!(IsValid() && IsValidDate(src)))
-    {
+bool Date::operator>(const Date& src) const {
+    if (!(IsValid() && IsValidDate(src))) {
         throw std::range_error("Invalid date");
     }
-    if (m_Year > src.m_Year)
-    {
+    if (m_Year > src.m_Year) {
         return true;
-    }
-    else if (m_Year == src.m_Year)
-    {
-        if (m_Month > src.m_Month)
-        {
+    } else if (m_Year == src.m_Year) {
+        if (m_Month > src.m_Month) {
             return true;
-        }
-        else if (m_Month == src.m_Month)
-        {
+        } else if (m_Month == src.m_Month) {
             return m_Day > src.m_Day;
-        }
-        else
-        {
+        } else {
             return false;
         }
-    }
-    else
-    {
+    } else {
         return false;
     }
 }
 
-bool Date::operator<=(const Date &src) const
-{
-    if (!(IsValid() && IsValidDate(src)))
-    {
+bool Date::operator<=(const Date& src) const {
+    if (!(IsValid() && IsValidDate(src))) {
         throw std::range_error("Invalid date");
     }
     return !(*this > src);
 }
 
-bool Date::operator>=(const Date &src) const
-{
-    if (!(IsValid() && IsValidDate(src)))
-    {
+bool Date::operator>=(const Date& src) const {
+    if (!(IsValid() && IsValidDate(src))) {
         throw std::range_error("Invalid date");
     }
     return !(*this < src);
@@ -459,51 +354,35 @@ bool Date::operator>=(const Date &src) const
 
 // This function should be always used together with DaysInYear()
 // The Current days and months value will be ignored
-void Date::DaysToDate(const int day)
-{
+void Date::DaysToDate(const int day) {
     int days = day;
     m_Day = 0;
     m_Month = 1;
-    while (days <= 0)
-    {
+    while (days <= 0) {
         m_Year--;
         days += (IsLeapYear(m_Year) ? 366 : 365);
     }
-    while (days > (IsLeapYear(m_Year) ? 366 : 365))
-    {
-        if (IsLeapYear(m_Year))
-        {
+    while (days > (IsLeapYear(m_Year) ? 366 : 365)) {
+        if (IsLeapYear(m_Year)) {
             days -= 366;
-        }
-        else
-        {
+        } else {
             days -= 365;
         }
         m_Year++;
     }
-    for (int i = 1; i < 12; i++)
-    {
-        if (i == 2 && IsLeapYear(m_Year))
-        {
-            if (days > 29)
-            {
+    for (int i = 1; i < 12; i++) {
+        if (i == 2 && IsLeapYear(m_Year)) {
+            if (days > 29) {
                 m_Month = i + 1;
                 days -= 29;
-            }
-            else
-            {
+            } else {
                 break;
             }
-        }
-        else
-        {
-            if (days > days_in_month[i - 1])
-            {
+        } else {
+            if (days > days_in_month[i - 1]) {
                 days -= days_in_month[i - 1];
                 m_Month = i + 1;
-            }
-            else
-            {
+            } else {
                 break;
             }
         }

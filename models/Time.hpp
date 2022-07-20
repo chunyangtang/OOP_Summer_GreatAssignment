@@ -29,18 +29,19 @@
     2022-6-29 由唐春洋完善了类中功能的代码实现
     2020-07-20 由唐春洋增加注释，并完善了功能
 *************************************************************************/
-class Time
-{
+class Time {
 public:
     // 用小时、分钟、秒构造Time对象
-    Time(unsigned int Hour = 0, unsigned int Minute = 0, unsigned int Second = 0);
+    Time(unsigned int Hour = 0, unsigned int Minute = 0,
+         unsigned int Second = 0);
     // 拷贝构造Time对象
-    Time(const Time &src);
+    Time(const Time& src);
 
     // 检查一个时分秒是否合法
-    static bool IsValidTime(unsigned int Hour, unsigned int Minute, unsigned int Second);
+    static bool IsValidTime(unsigned int Hour, unsigned int Minute,
+                            unsigned int Second);
     // 检查一个Time对象是否合法
-    static bool IsValidTime(const Time &time);
+    static bool IsValidTime(const Time& time);
     // 检查自身是否合法
     bool IsValid() const;
 
@@ -55,7 +56,7 @@ public:
     // 设置输出字符串是否为24小时制
     static void Set24Hours(bool Is24Hours);
     // 设置输出字符串是否带冒号
-    static void SetFormat(bool IsRegularFormat);    
+    static void SetFormat(bool IsRegularFormat);
 
     // 获取自0：0：0的总秒数
     unsigned int Seconds() const;
@@ -63,16 +64,16 @@ public:
     std::string GetFormatString() const;
 
     // Operators
-    Time &operator=(const Time &src);
+    Time& operator=(const Time& src);
 
     // 用于外界访问的常量引用的小时
-    const unsigned int &Hour;
+    const unsigned int& Hour;
     // 用于外界访问的常量引用的分钟
-    const unsigned int &Minute;
+    const unsigned int& Minute;
     // 用于外界访问的常量引用的秒
-    const unsigned int &Second;
+    const unsigned int& Second;
 
-private:
+protected:
     // 无符号整数，表示小时
     unsigned int m_Hour;
     // 无符号整数，表示分钟

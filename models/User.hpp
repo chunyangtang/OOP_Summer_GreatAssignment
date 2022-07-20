@@ -14,9 +14,11 @@
 
 #ifndef User_hpp
 #define User_hpp
+#include "DateTime.hpp"
 #include "MD5.hpp"
 #include "Tube.hpp"
 #include <string>
+#include <tuple>
 
 // 核酸检测结果枚举类
 enum class TestResult {
@@ -24,6 +26,11 @@ enum class TestResult {
     NEGATIVE = 0,  // 阴性为0
     POSITIVE = 1   // 阳性为1
 };
+
+// 定义用户权限元组别名
+using UserAuth = std::tuple<bool, bool, bool>;
+// 定义用户智能指针的别名
+using pUser = std::shared_ptr<User>;
 
 /*************************************************************************
 【类名】User
@@ -39,17 +46,33 @@ newPassword)用旧密码变更新密码
 *************************************************************************/
 class User {
 public:
+    // 构造函数
+    User(std::string id, std::string name, std::string password);
+    // 普通用户重置password
     bool ResetPassword(std::string oldPassword, std::string newPassword);
+    // 获取用户权限状态
+    UserAuth GetStatus() const;
+    // 通过ID查找用户
+    static pUser FindUser(std::string id);
 
 private:
+    // 友元类声明
+    friend class Tube;
+    // 存储全部用户指针的vector
+    static std::vector<pUser> m_AllUsers;
     std::string m_Name;
     MD5 m_Password;
     std::string m_ID;
 
     class Admin {
-        bool ResetPassword(User* user, std::string newPassword);
-        bool AddRole(User* user, std::string role);
-        bool TakeRole(User* user, std::string role);
+        // 重置任意用户password
+        bool ResetPassword(pUser user, std::string newPassword);
+        // 删除用户
+        bool DeleteUser(pUser user);
+        // 为用户添加身份
+        bool AddRole(pUser user, std::string role);
+        // 为用户删除身份
+        bool DeleteRole(pUser user, std::string role);
     };
 
     class Collector {};
@@ -57,8 +80,10 @@ private:
     Admin* m_Admin;
     Collector* m_Collector;
     Recorder* m_Recorder;
-    // 上次检测信息
-    TestResult m_LastTestResult;
+    // 上次检测结果
+    TestResult m_LastUserResult;
+    // 上次检测时间
+    DateTime m_LastTestDate;
 };
 
 #endif /* User_hpp */

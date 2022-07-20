@@ -23,20 +23,26 @@
 【接口说明】
     构造函数：Date(int year, int month, int day)按日期构造Date对象
     拷贝构造函数：Date(const Date& date)拷贝构造Date对象
-    ......
+    设置日期函数：Set(unsigned int Year, unsigned int Month, unsigned int
+Day)按年月日设置日期
+    设置范围函数：SetRange(unsigned int Year, unsigned int
+Month, unsigned int Day)设置最大最小年份范围
+    设置格式函数：SetFormat(const
+string& Format)设置获取的格式化日期字符串格式
+
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
 【更改记录】
     2022-6-29 由唐春洋完善了类中功能的代码实现
     2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
 *************************************************************************/
 
-class Date
-{
+class Date {
 public:
     // 按传入的日期构造一个日期对象
-    Date(unsigned int Year = 1900, unsigned int Month = 1, unsigned int Day = 1);
+    Date(unsigned int Year = 1900, unsigned int Month = 1,
+         unsigned int Day = 1);
     // 拷贝构造函数
-    Date(const Date &src);
+    Date(const Date& src);
 
     // Setters
     bool Set(unsigned int Year, unsigned int Month, unsigned int Day);
@@ -45,9 +51,10 @@ public:
 
     // Checkers
     static bool IsLeapYear(unsigned int Year);
-    static bool IsLeapYear(const Date &src);
-    static bool IsValidDate(unsigned int Year, unsigned int Month, unsigned int Day);
-    static bool IsValidDate(const Date &date);
+    static bool IsLeapYear(const Date& src);
+    static bool IsValidDate(unsigned int Year, unsigned int Month,
+                            unsigned int Day);
+    static bool IsValidDate(const Date& date);
     bool IsLeapYear() const;
     bool IsValid() const;
 
@@ -55,29 +62,29 @@ public:
     unsigned int DaysInYear() const;
     std::string GetFormatString() const;
 
-    // Operators
-    Date &operator=(const Date &src);
-    Date &operator+(const int &days) const;
-    Date &operator+=(const int &days);
-    Date &operator++();
-    Date &operator++(int);
-    bool operator!=(const Date &src) const;
-    bool operator==(const Date &src) const;
-    int operator-(const Date &src) const;
-    Date &operator-(const int &days) const;
-    Date &operator-=(const int &days);
-    Date &operator--();
-    Date &operator--(int);
-    bool operator<(const Date &src) const;
-    bool operator>(const Date &src) const;
-    bool operator<=(const Date &src) const;
-    bool operator>=(const Date &src) const;
+    // 对日期的运算符重载函数
+    Date& operator=(const Date& src);
+    Date& operator+(const int& days) const;
+    Date& operator+=(const int& days);
+    Date& operator++();
+    Date& operator++(int);
+    bool operator!=(const Date& src) const;
+    bool operator==(const Date& src) const;
+    int operator-(const Date& src) const;
+    Date& operator-(const int& days) const;
+    Date& operator-=(const int& days);
+    Date& operator--();
+    Date& operator--(int);
+    bool operator<(const Date& src) const;
+    bool operator>(const Date& src) const;
+    bool operator<=(const Date& src) const;
+    bool operator>=(const Date& src) const;
     // 用于外界访问的常量引用的年
-    const unsigned int &Year;
+    const unsigned int& Year;
     // 用于外界访问的常量引用的月
-    const unsigned int &Month;
+    const unsigned int& Month;
     // 用于外界访问的常量引用的日
-    const unsigned int &Day;
+    const unsigned int& Day;
 
 private:
     void DaysToDate(const int days);

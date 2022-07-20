@@ -36,19 +36,19 @@ MaxCapasity)用序列号与最大容量初始化试管
 class Tube {
 public:
     // 使用序列号构造试管
-    Tube(std::string SerialNumber, unsigned MaxCapasity = 10)
-        : m_SerialNumber(SerialNumber), m_iResult(-1),
-          MAX_CAPASITY(MaxCapasity) {}
+    Tube(std::string SerialNumber, unsigned MaxCapasity = 10);
 
 private:
-    //试管编号
+    // 友元类声明
+    friend class User;
+    // 试管编号
     std::string m_SerialNumber;
-    //试管类型
-    int m_iResult;
-    //试管包含的用户
+    // 试管包含的用户
     std::vector<pUser> m_Users;
     // 最大用户数量
     const unsigned MAX_CAPASITY;
+    // 试管检测结果
+    TestResult m_TubeResult;
 };
 
 #endif
