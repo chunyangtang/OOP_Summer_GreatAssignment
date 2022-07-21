@@ -20,23 +20,24 @@
 class ControllerCommandline : public ControllerBase {
 public:
     // 展示用户权限信息
-    virtual void ShowUserAuth(const pUser& user) const override;
+    virtual std::string ShowUserAuth(const pUser& user) const override;
     // 展示可用操作
-    void ShowAvailableOperations(const pUser& user = nullptr) const;
+    std::string ShowAvailableOperations(const pUser& user = nullptr) const;
     // 按分支选择操作
-    void ChooseOperation(const pUser& user = nullptr);
+    void ChooseOperation(const pUser& user = nullptr){};
     // 用户注册
-    virtual ControllerError Register(std::string id, std::string password);
+    virtual pUser Register(std::string id, std::string name,
+                           std::string password){};
     // 登录与角色选择
-    virtual ControllerError Login(std::string id, std::string password);
+    virtual pUser Login(std::string id, std::string password){};
     // 被试者可执行的操作
-    virtual void RoleRegular(pUser& user) = 0;
+    virtual void RoleRegular(pUser& user){};
     // 管理员可执行的操作
-    virtual void RoleAdmin(pUser& user) = 0;
+    virtual void RoleAdmin(pUser& user){};
     // 采集员可执行的操作
-    virtual void RoleCollector(pUser& user) = 0;
+    virtual void RoleCollector(pUser& user){};
     // 录入员可执行的操作
-    virtual void RoleRecorder(pUser& user) = 0;
+    virtual void RoleRecorder(pUser& user){};
 };
 
 #endif

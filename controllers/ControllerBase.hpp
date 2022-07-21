@@ -51,11 +51,12 @@ public:
     // 保存程序信息到试管文件
     ControllerError SavetoTubeFile(const char* filename);
     // 展示用户权限信息
-    virtual void ShowUserAuth(const pUser& user) const = 0;
+    virtual std::string ShowUserAuth(const pUser& user) const = 0;
     // 用户注册
-    virtual ControllerError Register(std::string id, std::string password) = 0;
+    virtual pUser Register(std::string id, std::string name,
+                           std::string password) = 0;
     // 登录与角色选择
-    virtual ControllerError Login(std::string id, std::string password) = 0;
+    virtual pUser Login(std::string id, std::string password) = 0;
     // 被试者可执行的操作
     virtual void RoleRegular(pUser& user) = 0;
     // 管理员可执行的操作

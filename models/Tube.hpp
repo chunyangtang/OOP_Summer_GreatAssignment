@@ -40,12 +40,12 @@ MaxCapasity)用序列号与最大容量初始化试管
 *************************************************************************/
 class Tube {
 private:
-    // 友元类声明，只有Collector、Recorder才可以管理试管
-    friend class User::Collector;
-    friend class User::Recorder;
     // 友元函数声明，只有解析、保存文件函数可以访问试管
     friend ControllerError ControllerBase::ParseTubeFile(const char*);
     friend ControllerError ControllerBase::SavetoTubeFile(const char*);
+    // 友元类声明，只有Collector、Recorder才可以管理试管
+    friend class User::Collector;
+    friend class User::Recorder;
     // 使用序列号构造试管
     Tube(std::string SerialNumber, unsigned MaxCapasity = 10);
     // 查找试管
