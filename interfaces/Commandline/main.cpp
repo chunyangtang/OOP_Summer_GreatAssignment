@@ -20,8 +20,8 @@ int main(int argc, const char* argv[]) {
     std::cout << "Welcome to TCY's Covid Nucleic Acid Test MIS!" << std::endl
               << std::endl;
     // 读取数据文件
-    FILE* UserFile;
-    FILE* TubeFile;
+    const char* UserFilename;
+    const char* TubeFilename;
     std::cout << "Initializing..." << std::endl;
     // 如果传入过多参数则提示错误
     if (argc > 3) {
@@ -52,10 +52,12 @@ int main(int argc, const char* argv[]) {
     }
     // 如果传入两个参数
     if (argc == 3) {
-
+        UserFilename = argv[1];
+        TubeFilename = argv[2];
     }
     // 如果未传入参数
-    else{
-
+    else {
+        UserFilename = "data/user.xml";
+        TubeFilename = "data/tube.xml";
     }
 }

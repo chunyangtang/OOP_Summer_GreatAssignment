@@ -14,8 +14,11 @@
 
 #include "User.hpp"
 
+// 静态vector初始化
+std::vector<pUser> User::m_AllUsers = {};
+
 User::User(std::string id, std::string name, std::string password)
-    : m_ID(id), m_Name(name) {
+    : ID(m_ID), Name(m_Name), m_ID(id), m_Name(name) {
     m_Password = MD5(password);
     m_Admin = nullptr;
     m_Collector = nullptr;
@@ -43,9 +46,13 @@ UserAuth User::GetStatus() const {
                            (m_Recorder != nullptr));
 }
 
-pUser User::FindUser(std::string id) {
-    for (auto user : m_AllUsers) {
-        if (user->m_ID == id) {
+std::pair<TestResult, DateTime> User::GetTestResult() const {
+    return std::make_pair(m_LastResult, m_LastTime);
+}
+
+pUser User::GetUser(std::string id, std::string password) {
+    for (auto& user : m_AllUsers) {
+        if (user->m_ID == id && user->m_Password == MD5(password)) {
             return user;
         }
     }
@@ -57,9 +64,9 @@ bool User::Admin::ResetPassword(pUser user, std::string newPassword) {
 }
 
 bool User::Admin::DeleteUser(pUser user) {
-    for (auto it : m_AllUsers) {
+    for (auto it = m_AllUsers.begin(); it != m_AllUsers.end(); ++it) {
         if (*it == user) {
-            m_AllUsers.erase(it);
+            it = m_AllUsers.erase(it);
             return true;
         }
     }
@@ -97,4 +104,52 @@ bool User::Admin::DeleteRole(pUser user, std::string role) {
     } else {
         return false;
     }
+}
+
+pTube User::Collector::CreateTube(std::string SerialNumber,
+                                  unsigned MaxCapasity = 10) {
+    new Tube(SerialNumber, MaxCapasity);
+}
+
+bool User::Collector::CollectUsers(pTube tube, std::string id, DateTime time) {
+    if (tube->m_CollectedUsers.size() >= tube->m_MaxCapasity) {
+        return false;
+    }
+    pUser temp = User::FindUser(id);
+    if (temp == nullptr) {
+        return false;
+    } else {
+        tube->m_CollectedUsers.push_back(std::make_pair(temp, time));
+    }
+}
+
+bool User::Recorder::RecordTubeStatus(std::string SerialNumber,
+                                      TestResult result) {
+    pTube tube = Tube::FindTube(SerialNumber);
+    if (tube != nullptr) {
+        tube->m_TubeResult = result;
+        User::Recorder::UpdateRecord(tube);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void User::Recorder::UpdateRecord(pTube tube) {
+    for (auto it : tube->m_CollectedUsers) {
+        pUser temp = User::FindUser(it.first());
+        if (temp != nullptr) {
+            temp->m_LastTime = it.second();
+            temp->m_LastResult = tube->m_TubeResult;
+        }
+    }
+}
+
+pUser User::FindUser(std::string id) {
+    for (auto user : m_AllUsers) {
+        if (user->m_ID == id) {
+            return user;
+        }
+    }
+    return nullptr;
 }

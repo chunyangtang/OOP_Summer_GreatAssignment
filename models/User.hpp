@@ -52,19 +52,13 @@ public:
     bool ResetPassword(std::string oldPassword, std::string newPassword);
     // 获取用户权限状态
     UserAuth GetStatus() const;
-    // 通过ID查找用户
-    static pUser FindUser(std::string id);
-
-private:
-    // 友元类声明
-    friend class Tube;
-    // 存储全部用户指针的vector
-    static std::vector<pUser> m_AllUsers;
-    std::string m_Name;
-    MD5 m_Password;
-    std::string m_ID;
+    // 获取核酸检测状态
+    std::pair<TestResult, DateTime> GetTestResult() const;
+    // 通过ID、密码查找用户
+    static pUser GetUser(std::string id, std::string password);
 
     class Admin {
+    public:
         // 重置任意用户password
         bool ResetPassword(pUser user, std::string newPassword);
         // 删除用户
@@ -73,17 +67,63 @@ private:
         bool AddRole(pUser user, std::string role);
         // 为用户删除身份
         bool DeleteRole(pUser user, std::string role);
+
+    private:
+        // 将用户类构造函数声明为友元函数
+        friend User::User(std::string, std::string, std::string);
+        // 将构造函数定义为私有
+        Admin() = default;
     };
 
-    class Collector {};
-    class Recorder {};
+    class Collector {
+    public:
+        // 将Admin设为友元类
+        friend class Admin;
+        // 新建试管
+        pTube CreateTube(std::string SerialNumber, unsigned MaxCapasity = 10);
+        // 录入采集信息
+        bool CollectUsers(pTube tube, std::string id, DateTime time);
+
+    private:
+        // 将构造函数定义为私有
+        Collector() = default;
+    };
+    class Recorder {
+    public:
+        // 将Admin设为友元类
+        friend class Admin;
+        // 录入试管状态
+        bool RecordTubeStatus(std::string SerialNumber, TestResult result);
+
+        // 根据试管结果更新用户结果
+        static void UpdateRecord(pTube tube);
+
+    private:
+        // 将构造函数定义为私有
+        Recorder() = default;
+    };
     Admin* m_Admin;
     Collector* m_Collector;
     Recorder* m_Recorder;
+
+    // 常量引用只读读取用户信息
+    const std::string& ID;
+    const std::string& Name;
+
+private:
+    // 通过ID查找用户，仅供类内使用
+    static pUser FindUser(std::string id);
+
+    // 存储全部用户指针的vector
+    static std::vector<pUser> m_AllUsers;
+    std::string m_Name;
+    MD5 m_Password;
+    std::string m_ID;
+
     // 上次检测结果
-    TestResult m_LastUserResult;
+    TestResult m_LastResult;
     // 上次检测时间
-    DateTime m_LastTestDate;
+    DateTime m_LastTime;
 };
 
 #endif /* User_hpp */
