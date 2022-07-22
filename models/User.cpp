@@ -241,13 +241,16 @@ bool User::Admin::DeleteRole(std::string ID, std::string role) {
 【函数名称】Collector::CreateTube
 【函数功能】录入试管
 【参数】SerialNumber： 试管序列号
-【返回值】pTube类型，为shared_ptr<Tube>的别名，查找到试管返回试管指针，否则返回nullptr
+【返回值】pTube类型，为shared_ptr<Tube>的别名，创建试管返回试管指针，已存在返回nullptr
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
     2020-07-20 由唐春洋增加注释
 *************************************************************************/
 pTube User::Collector::CreateTube(std::string SerialNumber) {
+    if (FindTube(SerialNumber) != nullptr) {
+        return nullptr;
+    }
     pTube p1(new Tube(SerialNumber));
     return p1;
 }

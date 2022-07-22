@@ -2,7 +2,4 @@
 <!--This is the tube-data-storing file.-->
 <AllTubes>
     <!--Only UNTESTED tubes are stored.-->
-    <Tube>
-        <SerialNumber>20200202111111666666</SerialNumber>
-    </Tube>
 </AllTubes>

@@ -48,10 +48,10 @@ bool ControllerBase::ParseUserFile(const char* filename) {
             std::string Name(user_child->FirstChildElement("Name")->GetText());
             std::string Password = "fake";
 
-            User* user = new User(ID, Name, Password);
-
-            user->m_Password = MD5::FromCipherText(std::string((
-                user_child->FirstChildElement("EncyptedPassword")->GetText())));
+            new User(ID, Name, Password);
+            pUser user = User::FindUser(ID);
+            user->m_Password = MD5::FromCipherText(std::string(
+                user_child->FirstChildElement("EncyptedPassword")->GetText()));
 
             // 初始化用户核酸检测结果
             std::string result(
@@ -79,21 +79,18 @@ bool ControllerBase::ParseUserFile(const char* filename) {
             }
             // 为用户添加权限信息
             bool authority = user_child->BoolAttribute("IsAdmin");
-            std::cout << "AUTHORITY : " << authority << std::endl;
             if (authority) {
                 user->m_pAdmin = new User::Admin;
             } else {
                 user->m_pAdmin = nullptr;
             }
             authority = user_child->BoolAttribute("IsCollector");
-            std::cout << "AUTHORITY : " << authority << std::endl;
             if (authority) {
                 user->m_pCollector = new User::Collector;
             } else {
                 user->m_pCollector = nullptr;
             }
             authority = user_child->BoolAttribute("IsRecorder");
-            std::cout << "AUTHORITY : " << authority << std::endl;
             if (authority) {
                 user->m_pRecorder = new User::Recorder;
             } else {
@@ -137,8 +134,8 @@ bool ControllerBase::ParseTubeFile(const char* filename) {
     while (tube_child) {
         std::string SerialNumber(
             tube_child->FirstChildElement("SerialNumber")->GetText());
-        Tube* p_tube = new Tube(SerialNumber);
-        pTube tube(p_tube);
+        new Tube(SerialNumber);
+        pTube tube = Tube::FindTube(SerialNumber);
         XMLElement* child = tube_child->FirstChildElement("User");
         while (child) {
             std::string ID(child->FirstChildElement("ID")->GetText());

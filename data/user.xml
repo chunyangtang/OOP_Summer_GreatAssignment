@@ -4,13 +4,13 @@
     <User IsAdmin="true" IsCollector="false" IsRecorder="false">
         <Name>tcy</Name>
         <ID>123456789123456789</ID>
-        <EncyptedPassword>144C9DEFAC04969C7BFAD8EFAA8EA194</EncyptedPassword>
-        <LastTest Result="UNTESTED"/>
+        <EncyptedPassword>202CB962AC59075B964B07152D234B70</EncyptedPassword>
+        <LastTest Result="NEGATIVE">2022 2 2 22 22 22</LastTest>
     </User>
-    <User IsAdmin="false" IsCollector="false" IsRecorder="true">
+    <User IsAdmin="false" IsCollector="true" IsRecorder="true">
         <Name>zsh</Name>
         <ID>147258369147258369</ID>
-        <EncyptedPassword>144C9DEFAC04969C7BFAD8EFAA8EA194</EncyptedPassword>
-        <LastTest Result="UNTESTED"/>
+        <EncyptedPassword>202CB962AC59075B964B07152D234B70</EncyptedPassword>
+        <LastTest Result="NEGATIVE">2022 2 2 22 22 23</LastTest>
     </User>
 </AllUsers>

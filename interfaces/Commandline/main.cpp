@@ -472,10 +472,14 @@ int main(int argc, const char* argv[]) {
                                     }
                                 }
                                 // 创建试管
-                                current_user->m_pCollector->CreateTube(
-                                    SerialNumber);
-                                std::cout << "Tube created successfully."
-                                          << std::endl;
+                                if (current_user->m_pCollector->CreateTube(
+                                        SerialNumber) != nullptr) {
+                                    std::cout << "Tube created successfully."
+                                              << std::endl;
+                                } else {
+                                    std::cout << "Tube already exists."
+                                              << std::endl;
+                                }
                             } else if (k == 2) {
                                 std::string o_SerialNumber;
                                 pTube tube;
