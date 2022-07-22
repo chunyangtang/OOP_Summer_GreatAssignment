@@ -1,7 +1,7 @@
 /*************************************************************************
 【文件名】ControllerBase.cpp
 【功能模块和目的】业务流程类基类实现
-【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-20
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-13
 【版权信息】以下代码由唐春洋根据清华大学自动化系2022年暑期“面向对象程序设计训练”课程要求独立编写，
     开发者唐春洋(tangcy21@mails.tsinghua.edu.cn)声明放弃对修改部分的任何版权诉求，任何使用者可做出任何修改、用于任何目的
     本代码遵守 CC 4.0 BY-SA 版权协议
@@ -9,12 +9,22 @@
     一、共享的权利。允许通过任何媒介和任何形式复制、发行作品。
     二、改编的权利。允许二次加工、转换和基于作品进行创作，不限制用途，甚至是商业应用。
 【更改记录】
-    2022-07-21 由唐春洋创建该文件
+    2022-07-13 由唐春洋创建该文件
+    2022-07-20 由唐春洋添加注释
 *************************************************************************/
 
 #include "ControllerBase.hpp"
 
-// 解析已存在的用户文件
+/*************************************************************************
+【函数名称】ControllerBase::ParseUserFile
+【函数功能】将用户数据从文件解析到内存中，构建相应对象
+【参数】filename：储存用户数据文件的文件名
+【返回值】bool类型：反映解析是否成功
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-13
+【更改记录】
+    2022-07-13 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 bool ControllerBase::ParseUserFile(const char* filename) {
     if (fopen(filename, "r") == NULL) {
         return false;
@@ -33,12 +43,17 @@ bool ControllerBase::ParseUserFile(const char* filename) {
         XMLElement* user_child =
             docHandle.FirstChildElement().FirstChildElement().ToElement();
         while (user_child) {
+            // 初始化用户姓名、ID、密码
             std::string ID(user_child->FirstChildElement("ID")->GetText());
             std::string Name(user_child->FirstChildElement("Name")->GetText());
             std::string Password = "fake";
 
             User* user = new User(ID, Name, Password);
 
+            user->m_Password = MD5::FromCipherText(std::string((
+                user_child->FirstChildElement("EncyptedPassword")->GetText())));
+
+            // 初始化用户核酸检测结果
             std::string result(
                 user_child->FirstChildElement("LastTest")->Attribute("Result"));
             if (result == "POSITIVE") {
@@ -62,10 +77,7 @@ bool ControllerBase::ParseUserFile(const char* filename) {
             } else {
                 user->m_LastResult = TestResult::UNTESTED;
             }
-
-            user->m_Password = MD5::FromCipherText(std::string(
-                user_child->FirstChildElement("EncyptedPassword")->GetText()));
-
+            // 为用户添加权限信息
             bool authority = user_child->BoolAttribute("IsAdmin");
             std::cout << "AUTHORITY : " << authority << std::endl;
             if (authority) {
@@ -96,7 +108,16 @@ bool ControllerBase::ParseUserFile(const char* filename) {
     return true;
 }
 
-// 解析已存在的试管文件
+/*************************************************************************
+【函数名称】ControllerBase::ParseTubeFile
+【函数功能】将试管数据从文件解析到内存中，构建相应对象
+【参数】filename：储存试管数据文件的文件名
+【返回值】bool类型：反映解析是否成功
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-13
+【更改记录】
+    2022-07-13 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 bool ControllerBase::ParseTubeFile(const char* filename) {
     if (fopen(filename, "r") == NULL) {
         return false;
@@ -135,7 +156,17 @@ bool ControllerBase::ParseTubeFile(const char* filename) {
     }
     return true;
 }
-// 保存程序信息到用户文件
+
+/*************************************************************************
+【函数名称】ControllerBase::SavetoUserFile
+【函数功能】将用户数据录入到文件中
+【参数】filename：储存试管数据文件的文件名
+【返回值】bool类型：反映保存是否成功
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-13
+【更改记录】
+    2022-07-13 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 bool ControllerBase::SavetoUserFile(const char* filename) {
     XMLDocument doc(true, COLLAPSE_WHITESPACE);
     XMLDeclaration* decl =
@@ -189,7 +220,17 @@ bool ControllerBase::SavetoUserFile(const char* filename) {
         return false;
     }
 }
-// 保存程序信息到试管文件
+
+/*************************************************************************
+【函数名称】ControllerBase::SavetoTubeFile
+【函数功能】将试管数据录入到文件中
+【参数】filename：储存试管数据文件的文件名
+【返回值】bool类型：反映保存是否成功
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-13
+【更改记录】
+    2022-07-13 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 bool ControllerBase::SavetoTubeFile(const char* filename) {
     XMLDocument doc(true, COLLAPSE_WHITESPACE);
     XMLDeclaration* decl =
@@ -235,6 +276,16 @@ bool ControllerBase::SavetoTubeFile(const char* filename) {
     }
 }
 
+/*************************************************************************
+【函数名称】ControllerBase::Register
+【函数功能】包装了User的构造过程，实现用户注册
+【参数】id：用户的ID，name：用户的姓名，password：用户的密码
+【返回值】pUser类型：注册成功返回用户指针，否则返回nullptr
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-13
+【更改记录】
+    2022-07-13 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 pUser ControllerBase::Register(std::string id, std::string name,
                                std::string password) {
     if (User::HaveUser(id)) {
@@ -244,7 +295,17 @@ pUser ControllerBase::Register(std::string id, std::string name,
     }
 }
 
-pUser ControllerBase::Login(std::string id, std::string password) {
+/*************************************************************************
+【函数名称】ControllerBase::Login
+【函数功能】包装了User的验证、获取过程，实现用户登录
+【参数】id：用户的ID，password：用户的密码
+【返回值】pUser类型：登录成功返回用户指针，否则返回nullptr
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-13
+【更改记录】
+    2022-07-13 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
+pUser ControllerBase::Login(std::string id, std::string password) const {
     if (User::HaveUser(id)) {
         return User::GetUser(id, password);
     } else {

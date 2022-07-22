@@ -57,7 +57,7 @@ bool User::ResetPassword(std::string oldPassword, std::string newPassword) {
         return false;
     }
     if (MD5(oldPassword) == m_Password) {
-        m_Password = MD5(newPassword);
+        m_Password.Update(newPassword);
         return true;
     } else {
         return false;
@@ -286,6 +286,16 @@ pTube User::Collector::FindTube(std::string SerialNumber) {
     return Tube::FindTube(SerialNumber);
 }
 
+/*************************************************************************
+【函数名称】Recorder::RecordTubeStatus
+【函数功能】录入试管检测结果
+【参数】SerialNumber： 试管序列号字符串， TetsResult：检测结果
+【返回值】bool类型，找到试管返回true，未找到返回false
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
+【更改记录】
+    2022-07-11 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 bool User::Recorder::RecordTubeStatus(std::string SerialNumber,
                                       TestResult result) {
     pTube tube = Tube::FindTube(SerialNumber);
@@ -298,6 +308,16 @@ bool User::Recorder::RecordTubeStatus(std::string SerialNumber,
     }
 }
 
+/*************************************************************************
+【函数名称】Recorder::UpdateRecord
+【函数功能】更新试管检测记录到用户，此函数已在RecordTubeStatus中调用，无需单独调用
+【参数】pTube：录入后的试管指针
+【返回值】无
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
+【更改记录】
+    2022-07-11 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 void User::Recorder::UpdateRecord(pTube tube) {
     using std::begin;
     using std::end;
@@ -311,6 +331,16 @@ void User::Recorder::UpdateRecord(pTube tube) {
     }
 }
 
+/*************************************************************************
+【函数名称】User::FindUser
+【函数功能】通过id查找用户，不需密码，不可在外部调用
+【参数】id：用户id
+【返回值】pUser类型，找到返回用户指针，未找到返回nullptr
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
+【更改记录】
+    2022-07-05 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 pUser User::FindUser(std::string id) {
     for (auto user : m_AllUsers) {
         if (user->m_ID == id) {

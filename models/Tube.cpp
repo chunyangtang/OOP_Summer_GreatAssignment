@@ -9,7 +9,8 @@
     一、共享的权利。允许通过任何媒介和任何形式复制、发行作品。
     二、改编的权利。允许二次加工、转换和基于作品进行创作，不限制用途，甚至是商业应用。
 【更改记录】
-    2022-07-20 由唐春洋创建该文件
+     2022-07-11 由唐春洋创建该类
+     2022-07-20 由唐春洋添加注释
 *************************************************************************/
 
 #include "Tube.hpp"
@@ -17,12 +18,32 @@
 // 静态列表初始化
 std::list<pTube> Tube::m_AllTubes = {};
 
+/*************************************************************************
+【函数名称】Tube::Tube
+【函数功能】构造试管，只有Collector、Controller可调用
+【参数】SerialNumber 20位试管编号（时间+6位流水YYYYMMDDhhmmssXXXXXX）
+【返回值】无
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
+【更改记录】
+    2022-07-05 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 Tube::Tube(std::string SerialNumber) : m_SerialNumber(SerialNumber) {
     m_TubeResult = TestResult::UNTESTED;
     m_AllTubes.push_back(std::make_shared<Tube>(*this));
     m_CollectedUsers.clear();
 }
 
+/*************************************************************************
+【函数名称】Tube::FindTube
+【函数功能】查找试管，由序列号得到试管指针
+【参数】SerialNumber 20位试管编号（时间+6位流水YYYYMMDDhhmmssXXXXXX）
+【返回值】pTube类型，为share_ptr<Tube>的别名，指向试管
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
+【更改记录】
+    2022-07-05 由唐春洋完善了类中功能的代码实现
+    2020-07-20 由唐春洋增加注释
+*************************************************************************/
 pTube Tube::FindTube(std::string SerialNumber) {
     for (auto& tube : m_AllTubes) {
         if (tube->m_SerialNumber == SerialNumber) {

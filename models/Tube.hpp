@@ -9,7 +9,8 @@
     一、共享的权利。允许通过任何媒介和任何形式复制、发行作品。
     二、改编的权利。允许二次加工、转换和基于作品进行创作，不限制用途，甚至是商业应用。
 【更改记录】
-    2022-07-20 由唐春洋创建该文件
+     2022-07-11 由唐春洋创建该类
+     2022-07-20 由唐春洋添加注释
 *************************************************************************/
 
 #ifndef Tube_hpp
@@ -38,25 +39,25 @@ enum class TestResult;
 【类名】Tube
 【功能】表示试管的类
 【接口说明】
-    构造函数：Tube(std::string SerialNumber, unsigned
-MaxCapasity)用序列号与最大容量初始化试管
-【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-07-20
+    构造函数：Tube(std::string SerialNumber) 用序列号初始化试管
+    查找试管函数：FindTube(std::string SerialNumber)
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-07-11
 【更改记录】
-     2022-07-20 由唐春洋创建该类
+     2022-07-11 由唐春洋创建该类
+     2022-07-20 由唐春洋添加注释
 *************************************************************************/
 class Tube {
 private:
     // 声明控制器类为友元，为与文件交换数据
     friend class ControllerBase;
-    // 友元函数声明，只有解析、保存文件函数可以访问试管
-    // friend int ControllerBase::ParseTubeFile(const char* filename);
-    // friend int ControllerBase::SavetoTubeFile(const char* filename);
     // 友元类声明，只有Collector、Recorder才可以管理试管
     friend class User;
+
     // 使用序列号构造试管
     Tube(std::string SerialNumber);
     // 查找试管
     static pTube FindTube(std::string SerialNumber);
+
     // 试管编号
     std::string m_SerialNumber;
     // 试管包含的用户与采集时间
