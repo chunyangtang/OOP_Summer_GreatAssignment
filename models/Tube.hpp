@@ -24,9 +24,15 @@
 #include <vector>
 
 // 定义用户智能指针的别名
+class User;
 using pUser = std::shared_ptr<User>;
+using pwUser = std::weak_ptr<User>;
 // 定义试管智能指针的别名
+class Tube;
 using pTube = std::shared_ptr<Tube>;
+
+class ControllerBase;
+enum class TestResult;
 
 /*************************************************************************
 【类名】Tube
@@ -40,22 +46,22 @@ MaxCapasity)用序列号与最大容量初始化试管
 *************************************************************************/
 class Tube {
 private:
+    // 声明控制器类为友元，为与文件交换数据
+    friend class ControllerBase;
     // 友元函数声明，只有解析、保存文件函数可以访问试管
-    friend ControllerError ControllerBase::ParseTubeFile(const char*);
-    friend ControllerError ControllerBase::SavetoTubeFile(const char*);
+    // friend int ControllerBase::ParseTubeFile(const char* filename);
+    // friend int ControllerBase::SavetoTubeFile(const char* filename);
     // 友元类声明，只有Collector、Recorder才可以管理试管
-    friend class User::Collector;
-    friend class User::Recorder;
+    friend class User;
     // 使用序列号构造试管
-    Tube(std::string SerialNumber, unsigned MaxCapasity = 10);
+    Tube(std::string SerialNumber);
     // 查找试管
     static pTube FindTube(std::string SerialNumber);
     // 试管编号
     std::string m_SerialNumber;
     // 试管包含的用户与采集时间
-    std::vector<std::pair<pUser, DateTime>> m_CollectedUsers;
-    // 最大用户数量
-    const unsigned MAX_CAPASITY;
+    std::vector<std::pair<pwUser, DateTime>> m_CollectedUsers;
+
     // 试管检测结果
     TestResult m_TubeResult;
     // 静态变量，储存全部试管指针的list

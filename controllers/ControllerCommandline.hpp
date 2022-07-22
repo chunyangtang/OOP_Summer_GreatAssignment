@@ -17,19 +17,15 @@
 
 #include "ControllerBase.hpp"
 
+// 枚举类的前置声明
+enum class TestResult;
+
 class ControllerCommandline : public ControllerBase {
 public:
     // 展示用户权限信息
     virtual std::string ShowUserAuth(const pUser& user) const override;
-    // 展示可用操作
-    std::string ShowAvailableOperations(const pUser& user = nullptr) const;
-    // 按分支选择操作
-    void ChooseOperation(const pUser& user = nullptr){};
-    // 用户注册
-    virtual pUser Register(std::string id, std::string name,
-                           std::string password){};
-    // 登录与角色选择
-    virtual pUser Login(std::string id, std::string password){};
+    // 展示用户核酸检测结果
+    virtual std::string ShowUserResult(const pUser& user) const override;
     // 被试者可执行的操作
     virtual void RoleRegular(pUser& user){};
     // 管理员可执行的操作

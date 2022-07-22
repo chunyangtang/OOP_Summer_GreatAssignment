@@ -13,3 +13,241 @@
 *************************************************************************/
 
 #include "ControllerBase.hpp"
+
+// 解析已存在的用户文件
+bool ControllerBase::ParseUserFile(const char* filename) {
+    if (fopen(filename, "r") == NULL) {
+        return false;
+    } else {
+        fclose(fopen(filename, "r"));
+    }
+    try {
+        // 用TinyXML2解析用户文件
+        XMLDocument doc(true, COLLAPSE_WHITESPACE);
+        doc.LoadFile(filename);
+        if (doc.Error()) {
+            return false;
+        }
+        XMLHandle docHandle(&doc);
+        // 获取子节点信息并加载到User对象中
+        XMLElement* user_child =
+            docHandle.FirstChildElement().FirstChildElement().ToElement();
+        while (user_child) {
+            std::string ID(user_child->FirstChildElement("ID")->GetText());
+            std::string Name(user_child->FirstChildElement("Name")->GetText());
+            std::string Password = "fake";
+
+            User* user = new User(ID, Name, Password);
+
+            std::string result(
+                user_child->FirstChildElement("LastTest")->Attribute("Result"));
+            if (result == "POSITIVE") {
+                user->m_LastResult = TestResult::POSITIVE;
+                std::string TestTime(
+                    user_child->FirstChildElement("LastTest")->GetText());
+                unsigned int year, month, day, hour, minute, second;
+                stringstream ss(TestTime);
+                ss >> year >> month >> day >> hour >> minute >> second;
+                user->m_LastTime =
+                    DateTime(year, month, day, hour, minute, second);
+            } else if (result == "NEGATIVE") {
+                user->m_LastResult = TestResult::NEGATIVE;
+                std::string TestTime(
+                    user_child->FirstChildElement("LastTest")->GetText());
+                unsigned int year, month, day, hour, minute, second;
+                stringstream ss(TestTime);
+                ss >> year >> month >> day >> hour >> minute >> second;
+                user->m_LastTime =
+                    DateTime(year, month, day, hour, minute, second);
+            } else {
+                user->m_LastResult = TestResult::UNTESTED;
+            }
+
+            user->m_Password = MD5::FromCipherText(std::string(
+                user_child->FirstChildElement("EncyptedPassword")->GetText()));
+
+            bool authority = user_child->BoolAttribute("IsAdmin");
+            std::cout << "AUTHORITY : " << authority << std::endl;
+            if (authority) {
+                user->m_pAdmin = new User::Admin;
+            } else {
+                user->m_pAdmin = nullptr;
+            }
+            authority = user_child->BoolAttribute("IsCollector");
+            std::cout << "AUTHORITY : " << authority << std::endl;
+            if (authority) {
+                user->m_pCollector = new User::Collector;
+            } else {
+                user->m_pCollector = nullptr;
+            }
+            authority = user_child->BoolAttribute("IsRecorder");
+            std::cout << "AUTHORITY : " << authority << std::endl;
+            if (authority) {
+                user->m_pRecorder = new User::Recorder;
+            } else {
+                user->m_pRecorder = nullptr;
+            }
+            user_child = user_child->NextSiblingElement();
+        }
+    } catch (...) {
+        return false;
+    }
+
+    return true;
+}
+
+// 解析已存在的试管文件
+bool ControllerBase::ParseTubeFile(const char* filename) {
+    if (fopen(filename, "r") == NULL) {
+        return false;
+    } else {
+        fclose(fopen(filename, "r"));
+    }
+    // 用TinyXML2解析用户文件
+    XMLDocument doc(true, COLLAPSE_WHITESPACE);
+    doc.LoadFile(filename);
+    if (doc.Error()) {
+        return false;
+    }
+    XMLHandle docHandle(&doc);
+    // 获取子节点信息并加载到Tube对象中
+    XMLElement* tube_child =
+        docHandle.FirstChildElement().FirstChildElement().ToElement();
+    while (tube_child) {
+        std::string SerialNumber(
+            tube_child->FirstChildElement("SerialNumber")->GetText());
+        Tube* p_tube = new Tube(SerialNumber);
+        pTube tube(p_tube);
+        XMLElement* child = tube_child->FirstChildElement("User");
+        while (child) {
+            std::string ID(child->FirstChildElement("ID")->GetText());
+            std::string str_datetime(
+                child->FirstChildElement("DateTime")->GetText());
+            unsigned int year, month, day, hour, minute, second;
+            stringstream ss(str_datetime);
+            ss >> year >> month >> day >> hour >> minute >> second;
+            DateTime date(year, month, day, hour, minute, second);
+            pwUser pw_User = User::FindUser(ID);
+            tube->m_CollectedUsers.push_back(std::make_pair(pw_User, date));
+            child = child->NextSiblingElement();
+        }
+        tube_child = tube_child->NextSiblingElement();
+    }
+    return true;
+}
+// 保存程序信息到用户文件
+bool ControllerBase::SavetoUserFile(const char* filename) {
+    XMLDocument doc(true, COLLAPSE_WHITESPACE);
+    XMLDeclaration* decl =
+        doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
+    doc.InsertFirstChild(decl);
+    XMLComment* comment = doc.NewComment("This is the user-data-storing file.");
+    doc.InsertEndChild(comment);
+    XMLElement* root = doc.NewElement("AllUsers");
+    doc.InsertEndChild(root);
+    for (auto& user : User::m_AllUsers) {
+        XMLElement* user_child = doc.NewElement("User");
+        root->InsertEndChild(user_child);
+        XMLElement* Name = doc.NewElement("Name");
+        Name->SetText(user->m_Name.c_str());
+        user_child->InsertEndChild(Name);
+        XMLElement* ID = doc.NewElement("ID");
+        ID->SetText(user->m_ID.c_str());
+        user_child->InsertEndChild(ID);
+        XMLElement* EncyptedPassword = doc.NewElement("EncyptedPassword");
+        stringstream ss;
+        ss << user->m_Password;
+        EncyptedPassword->SetText(ss.str().c_str());
+        user_child->InsertEndChild(EncyptedPassword);
+
+        XMLElement* LastTest = doc.NewElement("LastTest");
+        stringstream ss2;
+        ss2 << user->m_LastTime.m_Date.Year << " "
+            << user->m_LastTime.m_Date.Month << " "
+            << user->m_LastTime.m_Date.Day << " " << user->m_LastTime.Hour
+            << " " << user->m_LastTime.Minute << " " << user->m_LastTime.Second;
+        std::string str_result;
+        if (user->m_LastResult == TestResult::POSITIVE) {
+            str_result = "POSITIVE";
+            LastTest->SetText(ss2.str().c_str());
+        } else if (user->m_LastResult == TestResult::NEGATIVE) {
+            str_result = "NEGATIVE";
+            LastTest->SetText(ss2.str().c_str());
+        } else {
+            str_result = "UNTESTED";
+        }
+        LastTest->SetAttribute("Result", str_result.c_str());
+        user_child->InsertEndChild(LastTest);
+
+        user_child->SetAttribute("IsAdmin", user->m_pAdmin != nullptr);
+        user_child->SetAttribute("IsCollector", user->m_pCollector != nullptr);
+        user_child->SetAttribute("IsRecorder", user->m_pRecorder != nullptr);
+    }
+    if (doc.SaveFile(filename)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+// 保存程序信息到试管文件
+bool ControllerBase::SavetoTubeFile(const char* filename) {
+    XMLDocument doc(true, COLLAPSE_WHITESPACE);
+    XMLDeclaration* decl =
+        doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
+    doc.InsertFirstChild(decl);
+    XMLComment* comment1 =
+        doc.NewComment("This is the tube-data-storing file.");
+    doc.InsertEndChild(comment1);
+    XMLElement* root = doc.NewElement("AllTubes");
+    XMLComment* comment2 = doc.NewComment("Only UNTESTED tubes are stored.");
+    root->InsertEndChild(comment2);
+    doc.InsertEndChild(root);
+    for (auto& tube : Tube::m_AllTubes) {
+        if (tube->m_TubeResult == TestResult::UNTESTED) {
+            // 新建Tube元素
+            XMLElement* tube_child = doc.NewElement("Tube");
+            root->InsertEndChild(tube_child);
+            // 插入SerialNumber元素
+            XMLElement* SerialNumber = doc.NewElement("SerialNumber");
+            SerialNumber->SetText(tube->m_SerialNumber.c_str());
+            tube_child->InsertEndChild(SerialNumber);
+            // 插入User元素
+            for (auto& user : tube->m_CollectedUsers) {
+                XMLElement* user_child = doc.NewElement("User");
+                tube_child->InsertEndChild(user_child);
+                XMLElement* ID = doc.NewElement("ID");
+                ID->SetText((user.first.lock())->m_ID.c_str());
+                user_child->InsertEndChild(ID);
+                stringstream ss;
+                ss << user.second.m_Date.Year << " " << user.second.m_Date.Month
+                   << " " << user.second.m_Date.Day << " " << user.second.Hour
+                   << " " << user.second.Minute << " " << user.second.Second;
+                XMLElement* DateTime = doc.NewElement("DateTime");
+                DateTime->SetText(ss.str().c_str());
+                user_child->InsertEndChild(DateTime);
+            }
+        }
+    }
+    if (doc.SaveFile(filename)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+pUser ControllerBase::Register(std::string id, std::string name,
+                               std::string password) {
+    if (User::HaveUser(id)) {
+        return nullptr;
+    } else {
+        return std::make_shared<User>(id, name, password);
+    }
+}
+
+pUser ControllerBase::Login(std::string id, std::string password) {
+    if (User::HaveUser(id)) {
+        return User::GetUser(id, password);
+    } else {
+        return nullptr;
+    }
+}

@@ -17,10 +17,9 @@
 // 静态列表初始化
 std::list<pTube> Tube::m_AllTubes = {};
 
-Tube::Tube(std::string SerialNumber, unsigned MaxCapasity = 10)
-    : m_SerialNumber(SerialNumber), MAX_CAPASITY(MaxCapasity) {
+Tube::Tube(std::string SerialNumber) : m_SerialNumber(SerialNumber) {
     m_TubeResult = TestResult::UNTESTED;
-    m_AllTubes.push_back(std::make_shared<User>(*this));
+    m_AllTubes.push_back(std::make_shared<Tube>(*this));
     m_CollectedUsers.clear();
 }
 

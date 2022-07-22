@@ -30,6 +30,7 @@ Month, unsigned int Day)设置最大最小年份范围
     设置格式函数：SetFormat(const
 string& Format)设置获取的格式化日期字符串格式
 
+
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
 【更改记录】
     2022-6-29 由唐春洋完善了类中功能的代码实现
@@ -44,40 +45,63 @@ public:
     // 拷贝构造函数
     Date(const Date& src);
 
-    // Setters
+    // 通过单独的年月日设置日期
     bool Set(unsigned int Year, unsigned int Month, unsigned int Day);
+    // 设置最大最小年份范围
     static bool SetRange(unsigned int minimum_Year, unsigned int maximum_Year);
+    // 设置格式化日期字符串格式
     static void SetFormat(bool is_regular_format = false);
 
-    // Checkers
+    // 判断给定年份是否为闰年
     static bool IsLeapYear(unsigned int Year);
+    // 判断给定的日期是否为闰年
     static bool IsLeapYear(const Date& src);
+    // 判断给定的年月日是否符合格式
     static bool IsValidDate(unsigned int Year, unsigned int Month,
                             unsigned int Day);
+    // 判断给定的日期是否符合格式
     static bool IsValidDate(const Date& date);
+    // 判断自身是否是闰年
     bool IsLeapYear() const;
+    // 判断自身是否符合格式
     bool IsValid() const;
 
-    // Getters
+    // 获取当前日期在今年的天数
     unsigned int DaysInYear() const;
+    // 获取格式化字符串
     std::string GetFormatString() const;
 
-    // 对日期的运算符重载函数
+    // =运算符重载， 将右侧的日期赋值给左侧的日期
     Date& operator=(const Date& src);
+    // +运算符重载， 将左侧的日期加上给定的天数，返回新的日期
     Date& operator+(const int& days) const;
+    // +=运算符重载， 将自身加上给定的天数，返回自身
     Date& operator+=(const int& days);
+    // ++运算符重载，先返回自身，再将自身加上1天
     Date& operator++();
+    // ++运算符重载，先将自身加上1天，再返回自身
     Date& operator++(int);
+    // !=运算符重载， 判断两个日期是否不同
     bool operator!=(const Date& src) const;
+    // ==运算符重载， 判断两个日期是否相同
     bool operator==(const Date& src) const;
+    // -运算符重载， 计算两个日期相差的天数
     int operator-(const Date& src) const;
+    // -运算符重载， 将左侧的日期减去给定的天数，返回新的日期
     Date& operator-(const int& days) const;
+    // -=运算符重载， 将自身减去给定的天数，返回自身
     Date& operator-=(const int& days);
+    // --运算符重载， 先返回自身，再将自身减去1天
     Date& operator--();
+    // --运算符重载， 先将自身减去1天，再返回自身
     Date& operator--(int);
+    // <运算符重载， 判断左侧的日期是否小于右侧的日期
     bool operator<(const Date& src) const;
+    // >运算符重载， 判断左侧的日期是否大于右侧的日期
     bool operator>(const Date& src) const;
+    // <=运算符重载， 判断左侧的日期是否小于等于右侧的日期
     bool operator<=(const Date& src) const;
+    // >=运算符重载， 判断左侧的日期是否大于等于右侧的日期
     bool operator>=(const Date& src) const;
     // 用于外界访问的常量引用的年
     const unsigned int& Year;
@@ -87,13 +111,22 @@ public:
     const unsigned int& Day;
 
 private:
+    // 将传入的天数转换为月和日
+    // 此函数只应被DaysInYear()调用
     void DaysToDate(const int days);
+    // 私有的变量天
     unsigned int m_Day;
+    // 私有的变量月
     unsigned int m_Month;
+    // 私有的变量年
     unsigned int m_Year;
+    // 静态变量最大年份
     static unsigned int maxium_Year;
+    // 静态变量最小年份
     static unsigned int minimum_Year;
+    // 静态变量设置日期字符串格式
     static bool regular_format;
+    // 静态常量，存储每月天数
     static const unsigned int days_in_month[12];
 };
 

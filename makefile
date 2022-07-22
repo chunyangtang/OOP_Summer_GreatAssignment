@@ -1,0 +1,2 @@
+all: 
+g++ -o main interfaces/Commandline/main.cpp controllers/ControllerBase.cpp controllers/ControllerCommandline.cpp models/Date.cpp models/DateTime.cpp models/MD5.cpp models/Time.cpp models/tinyxml2.cpp models/Tube.cpp models/User.cpp

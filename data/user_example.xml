@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This is the EXAMPLE of user-data-storing file. -->
+<AllUsers>
+    <User IsAdmin = "true" IsCollector = "true" IsRecorder = "true">
+        <Name>
+            AllCapableMan
+        </Name>
+        <ID>
+            123456789123456789
+        </ID>
+        <EncyptedPassword>
+            202CB962AC59075B964B07152D234B70
+        </EncyptedPassword>
+        <LastTest Result = "NEGATIVE">
+            2021 1 1 12 12 12
+        </LastTest>
+    </User>
+    <User IsAdmin = "false" IsCollector = "false" IsRecorder = "false">
+        <Name>
+            RegularPerson
+        </Name>
+        <ID>
+            123456789987654321
+        </ID>
+        <EncyptedPassword>
+            202CB962AC59075B964B07152D234B70
+        </EncyptedPassword>
+        <LastTest Result = "UNTESTED">
+        </LastTest>
+    </User>
+</AllUsers>

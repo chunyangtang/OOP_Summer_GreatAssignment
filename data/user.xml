@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This is the user-data-storing file.-->
+<AllUsers>
+    <User IsAdmin="true" IsCollector="false" IsRecorder="false">
+        <Name>tcy</Name>
+        <ID>123456789123456789</ID>
+        <EncyptedPassword>144C9DEFAC04969C7BFAD8EFAA8EA194</EncyptedPassword>
+        <LastTest Result="UNTESTED"/>
+    </User>
+    <User IsAdmin="false" IsCollector="false" IsRecorder="true">
+        <Name>zsh</Name>
+        <ID>147258369147258369</ID>
+        <EncyptedPassword>144C9DEFAC04969C7BFAD8EFAA8EA194</EncyptedPassword>
+        <LastTest Result="UNTESTED"/>
+    </User>
+</AllUsers>

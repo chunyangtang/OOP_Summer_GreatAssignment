@@ -24,7 +24,8 @@ DateTime::DateTime(unsigned int Year, unsigned int Month, unsigned int Day,
     }
 }
 
-DateTime::DateTime(const DateTime& src) {
+DateTime::DateTime(const DateTime& src)
+    : Hour(m_Hour), Minute(m_Minute), Second(m_Second) {
     if (!IsValidDateTime(src)) {
         throw std::invalid_argument("Invalid DateTime");
     }
@@ -34,10 +35,11 @@ DateTime::DateTime(const DateTime& src) {
     m_Second = src.m_Second;
 }
 
-DateTime::DateTime(const Date& date, const Time& time) {
-    m_Date = date;
-    Time::Time(time);
-}
+// DateTime::DateTime(const Date& date, const Time& time)
+//     : Hour(m_Hour), Minute(m_Minute), Second(m_Second) {
+//     m_Date = date;
+//     Time(time);
+// }
 
 bool DateTime::Set(unsigned int Year, unsigned int Month, unsigned int Day,
                    unsigned int Hour, unsigned int Minute,
@@ -65,6 +67,11 @@ void DateTime::SetTime(const Time& time) {
     Time::Set(time.Hour, time.Minute, time.Second);
 }
 
+void DateTime::SetFormat(bool is_regular_format) {
+    regular_format = is_regular_format;
+    Date::SetFormat(is_regular_format);
+}
+
 bool DateTime::IsValidDateTime(unsigned int Year, unsigned int Month,
                                unsigned int Day, unsigned int Hour,
                                unsigned int Minute, unsigned int Second) {
@@ -82,7 +89,11 @@ std::string DateTime::GetFormatString() const {
     if (!IsValid()) {
         throw std::invalid_argument("Invalid DateTime");
     }
-    return m_Date.GetFormatString() + Time::GetFormatString();
+    if (regular_format) {
+        return m_Date.GetFormatString() + Time::GetFormatString();
+    } else {
+        return m_Date.GetFormatString() + ' ' + Time::GetFormatString();
+    }
 }
 
 DateTime& DateTime::operator=(const DateTime& src) {

@@ -48,6 +48,16 @@ Date::Date(unsigned int Year, unsigned int Miniute, unsigned int Day)
     }
 }
 
+/*************************************************************************
+【函数名称】Date::Date(const Date& src)
+【函数功能】拷贝构造函数，拷贝一个日期，将私有成员与公有常量引用关联
+【参数】src：源日期
+【返回值】构造函数不可有返回值
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date::Date(const Date& src) : Year(m_Year), Month(m_Month), Day(m_Day) {
     if (!IsValidDate(src)) {
         throw std::range_error("Invalid date");
@@ -57,7 +67,16 @@ Date::Date(const Date& src) : Year(m_Year), Month(m_Month), Day(m_Day) {
     m_Day = src.m_Day;
 }
 
-// Setters
+/*************************************************************************
+【函数名称】Date::Set
+【函数功能】通过单独的年月日设置日期，并进行日期的合法性检查
+【参数】Year：年份，Month：月份，Day：日期
+【返回值】bool型，表示是否设置成功
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::Set(unsigned int Year, unsigned int Month, unsigned int Day) {
     if (!IsValidDate(Year, Month, Day)) {
         return false;
@@ -69,6 +88,16 @@ bool Date::Set(unsigned int Year, unsigned int Month, unsigned int Day) {
     }
 }
 
+/*************************************************************************
+【函数名称】Date::SetRange
+【函数功能】设置日期类最大最小年份范围
+【参数】minimum_Year, maximum_Year：最小最大年份
+【返回值】bool型，表示是否设置成功
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::SetRange(unsigned int minimum_Year, unsigned int maximum_Year) {
     if (minimum_Year > maximum_Year) {
         return false;
@@ -79,11 +108,30 @@ bool Date::SetRange(unsigned int minimum_Year, unsigned int maximum_Year) {
     }
 }
 
+/*************************************************************************
+【函数名称】Date::SetFormat
+【函数功能】设置格式化日期字符串格式
+【参数】is_regular_format：是否为标准格式，如果为正常格式，则格式为YYYYMMDD，如果为非正常格式，则格式为YYYY-MM-DD
+【返回值】无
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 void Date::SetFormat(bool is_regular_format) {
     Date::regular_format = is_regular_format;
 }
 
-// Checkers
+/*************************************************************************
+【函数名称】Date::IsLeapYear
+【函数功能】检查给定年份是否为闰年
+【参数】Year：年份
+【返回值】bool型，表示是否为闰年
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::IsLeapYear(unsigned int Year) {
     if (Year < minimum_Year || Year > maxium_Year) {
         throw std::range_error("Invalid year");
@@ -91,6 +139,16 @@ bool Date::IsLeapYear(unsigned int Year) {
     return (Year % 4 == 0) && (Year % 100 != 0 || Year % 400 == 0);
 }
 
+/*************************************************************************
+【函数名称】Date::IsLeapYear
+【函数功能】检查一个日期是否为闰年
+【参数】src：日期类对象
+【返回值】bool型，表示是否为闰年
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::IsLeapYear(const Date& src) {
     if (!IsValidDate(src)) {
         throw std::range_error("Invalid date");
@@ -181,13 +239,13 @@ Date& Date::operator+(const int& days) const {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
-    Date temp(*this);
-    int temp_days = temp.DaysInYear() + days;
-    temp.DaysToDate(temp_days);
-    if (!IsValidDate(temp)) {
+    Date* temp = new Date(*this);
+    int temp_days = temp->DaysInYear() + days;
+    temp->DaysToDate(temp_days);
+    if (!IsValidDate(*temp)) {
         throw std::range_error("Invalid date");
     }
-    return temp;
+    return *temp;
 }
 
 Date& Date::operator+=(const int& days) {
@@ -206,12 +264,12 @@ Date& Date::operator++() {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
-    Date temp(*this);
+    Date* temp = new Date(*this);
     *this += 1;
     if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
-    return temp;
+    return *temp;
 }
 
 Date& Date::operator++(int) {
@@ -281,12 +339,12 @@ Date& Date::operator--() {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
-    Date temp = *this;
+    Date* temp = new Date(*this);
     *this -= 1;
     if (!IsValid()) {
         throw std::range_error("Invalid date");
     }
-    return temp;
+    return *temp;
 }
 
 Date& Date::operator--(int) {
@@ -352,8 +410,6 @@ bool Date::operator>=(const Date& src) const {
     return !(*this < src);
 }
 
-// This function should be always used together with DaysInYear()
-// The Current days and months value will be ignored
 void Date::DaysToDate(const int day) {
     int days = day;
     m_Day = 0;

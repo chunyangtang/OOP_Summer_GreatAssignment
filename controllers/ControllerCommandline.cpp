@@ -16,6 +16,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <memory>
 #include <sstream>
 #include <string>
 #include <tuple>
@@ -24,43 +25,39 @@ std::string ControllerCommandline::ShowUserAuth(const pUser& user) const {
     std::map<bool, std::string> authMap = {{true, "YES"}, {false, "NO"}};
     std::tuple<bool, bool, bool> authTuple = user->GetStatus();
     std::ostringstream oss;
+    oss << "------------------------------------------" << std::endl;
     oss << "   User: " << user->Name << ", ID: " << user->ID << "   "
         << std::endl;
     oss << "------------------------------------------" << std::endl;
     oss << "|  Role   | Admin | Collector | Recorder |" << std::endl;
-    oss << "|Authority|  " << setw(5) << authMap[std::get<0>(authTuple)]
-        << "|    " << setw(7) << authMap[std::get<1>(authTuple)] << "|    "
-        << setw(7) << authMap[std::get<2>(authTuple)] << '|' << std::endl
+    oss << "|Authority|  " << setw(5) << left << authMap[std::get<0>(authTuple)]
+        << "|    " << setw(7) << left << authMap[std::get<1>(authTuple)]
+        << "|    " << setw(6) << left << authMap[std::get<2>(authTuple)] << '|'
+        << std::endl
         << "------------------------------------------" << std::endl;
     return oss.str();
 }
 
-std::string
-ControllerCommandline::ShowAvailableOperations(const pUser& user) const {
+std::string ControllerCommandline::ShowUserResult(const pUser& user) const {
     std::ostringstream oss;
-    if (user == nullptr) {
-        oss << "Available Operations:" << std::endl;
-        oss << "   1. Login" << std::endl;
-        oss << "   2. Register" << std::endl;
-        oss << "   3. Quit" << std::endl;
-        oss << "Please input an integer: " << std::endl;
-        return oss.str();
+    oss << "------------------------------------------" << std::endl;
+    oss << "   User: " << user->Name << ", ID: " << user->ID << "   "
+        << std::endl;
+    auto result = user->GetTestResult();
+    oss << "------------------------------------------" << std::endl;
+    if (result.first == TestResult::UNTESTED) {
+        oss << "         No Result Available              " << std::endl;
+        oss << "------------------------------------------" << std::endl;
     } else {
-        oss << ShowUserAuth(user);
-        std::tuple<bool, bool, bool> authTuple = user->GetStatus();
-        oss << "Available Operations:" << std::endl;
-        oss << "   1. Login as a regular user" << std::endl;
-        if (std::get<0>(authTuple)) {
-            oss << "   2. Login as an administrator" << std::endl;
-        }
-        if (std::get<1>(authTuple)) {
-            oss << "   3. Login as a collector" << std::endl;
-        }
-        if (std::get<2>(authTuple)) {
-            oss << "   4. Login as a recorder" << std::endl;
-        }
-        oss << "   5. Logout" << std::endl;
-        oss << "Please input an integer: " << std::endl;
-        return oss.str();
+        DateTime::SetFormat(false);
+
+        oss << "  Lastest Test Time: " << result.second.GetFormatString()
+            << std::endl;
+        oss << "  Test Result      : "
+            << (result.first == TestResult::POSITIVE ? "POSITIVE" : "NEGATIVE")
+            << std::endl;
+        oss << "------------------------------------------" << std::endl;
+        DateTime::SetFormat(true);
     }
+    return oss.str();
 }

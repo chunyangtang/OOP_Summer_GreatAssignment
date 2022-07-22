@@ -43,14 +43,17 @@ public:
     // 拷贝构造函数
     DateTime(const DateTime& src);
     // 构造一个日期时间，其中日期和时间分别由Date和Time类构造
-    DateTime(const Date& date, const Time& time = Time());
+    // DateTime(const Date& date, const Time& time = Time());
     //
+    using Time::Set;
     bool Set(unsigned int Year, unsigned int Month, unsigned int Day,
              unsigned int Hour, unsigned int Minute, unsigned int Second);
     bool SetDate(unsigned int Year, unsigned int Month, unsigned int Day);
     bool SetTime(unsigned int Hour, unsigned int Minute, unsigned int Second);
     void SetDate(const Date& date);
     void SetTime(const Time& time);
+    static void SetFormat(bool is_regular_format = true);
+
     // Checkers
     static bool IsValidDateTime(unsigned int Year, unsigned int Month,
                                 unsigned int Day, unsigned int Hour,
