@@ -19,6 +19,7 @@
 #include "../controllers/ControllerBase.hpp"
 #include "DateTime.hpp"
 #include "User.hpp"
+#include "tinyxml2.h"
 #include <list>
 #include <memory>
 #include <string>
@@ -31,7 +32,7 @@ using pwUser = std::weak_ptr<User>;
 // 定义试管智能指针的别名
 class Tube;
 using pTube = std::shared_ptr<Tube>;
-
+// 类的前置声明
 class ControllerBase;
 enum class TestResult;
 
@@ -39,6 +40,8 @@ enum class TestResult;
 【类名】Tube
 【功能】表示试管的类
 【接口说明】
+    从文件加载试管信息 static bool LoadFile(const char* filename)
+    保存试管信息到文件 static bool SaveFile(const char* filename)
     构造函数：Tube(std::string SerialNumber) 用序列号初始化试管
     查找试管函数：FindTube(std::string SerialNumber)
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-07-11
@@ -47,10 +50,14 @@ enum class TestResult;
      2022-07-20 由唐春洋添加注释
 *************************************************************************/
 class Tube {
+public:
+    // 从文件加载试管信息
+    static bool LoadFile(const char* filename);
+    // 保存试管信息到文件
+    static bool SaveFile(const char* filename);
+
 private:
-    // 声明控制器类为友元，为与文件交换数据
-    friend class ControllerBase;
-    // 友元类声明，只有Collector、Recorder才可以管理试管
+    // 友元类声明，只有User才可以管理试管
     friend class User;
 
     // 使用序列号构造试管

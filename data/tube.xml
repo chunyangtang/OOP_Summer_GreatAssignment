@@ -2,4 +2,15 @@
 <!--This is the tube-data-storing file.-->
 <AllTubes>
     <!--Only UNTESTED tubes are stored.-->
+    <Tube>
+        <SerialNumber>20220101111111666666</SerialNumber>
+        <User>
+            <ID>123456789123456789</ID>
+            <DateTime>20220202121212</DateTime>
+        </User>
+        <User>
+            <ID>123456789987654321</ID>
+            <DateTime>20220203121212</DateTime>
+        </User>
+    </Tube>
 </AllTubes>

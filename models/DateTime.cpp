@@ -36,6 +36,33 @@ DateTime::DateTime(unsigned int Year, unsigned int Month, unsigned int Day,
 
 /*************************************************************************
 【函数名称】DateTime::DateTime
+【函数功能】
+【参数】str：字符串形式的时间
+【返回值】无
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-06-29
+【更改记录】
+    2022-06-29 由唐春洋完善了类中功能的代码实现
+    2022-07-20 由唐春洋增加注释
+*************************************************************************/
+DateTime::DateTime(std::string str)
+    : Hour(m_Hour), Minute(m_Minute), Second(m_Second) {
+    std::stringstream ss;
+    ss << str;
+    long long unsigned time;
+    ss >> time;
+    unsigned int Year = time / 10000000000;
+    unsigned int Month = (time % 10000000000) / 100000000;
+    unsigned int Day = (time % 100000000) / 1000000;
+    unsigned int Hour = (time % 1000000) / 10000;
+    unsigned int Minute = (time % 10000) / 100;
+    unsigned int Second = time % 100;
+    if (!(Set(Hour, Minute, Second) && m_Date.Set(Year, Month, Day))) {
+        Set(1900, 1, 1, 0, 0, 0);
+    }
+}
+
+/*************************************************************************
+【函数名称】DateTime::DateTime
 【函数功能】拷贝构造函数
 【参数】src：源对象
 【返回值】无

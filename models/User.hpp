@@ -19,6 +19,7 @@
 #include "DateTime.hpp"
 #include "MD5.hpp"
 #include "Tube.hpp"
+#include "tinyxml2.h"
 #include <memory>
 #include <string>
 #include <tuple>
@@ -51,6 +52,8 @@ oldPassword, std::string newPassword)通过旧密码重置密码
     获取核酸检测状态GetTestResult()获取检测结果与日期
     判断是否存在指定用户HaveUser(std::string id)返回bool结果
     查找指定用户GetUser(std::string id, std::string password)返回用户指针
+    从文件加载全部用户信息 static bool LoadFile(const char* filename)
+    保存全部用户信息到文件 static bool SaveFile(const char* filename)
     管理员指针Admin* m_pAdmin
     采集员指针Collector* m_pCollector
     录入员指针Recorder* m_pRecorder
@@ -76,6 +79,10 @@ public:
     static bool HaveUser(std::string id);
     // 静态成员，通过ID、密码查找用户
     static pUser GetUser(std::string id, std::string password);
+    // 从文件加载全部用户信息
+    static bool LoadFile(const char* filename);
+    // 保存全部用户信息到文件
+    static bool SaveFile(const char* filename);
 
     /*************************************************************************
     【类名】Admin
@@ -105,8 +112,8 @@ public:
         bool DeleteRole(std::string ID, std::string role);
 
     private:
-        // 声明控制器类为友元，为与文件交换数据
-        friend class ControllerBase;
+        // 将文件加载函数设置为友元函数
+        friend bool User::LoadFile(const char* filename);
         // 将用户类构造函数声明为友元函数
         friend User::User(std::string, std::string, std::string);
 
@@ -133,15 +140,15 @@ public:
         // 新建试管
         pTube CreateTube(std::string SerialNumber);
         // 录入采集信息
-        bool CollectUsers(pTube tube, std::string id, DateTime time);
+        bool CollectUsers(const pTube& tube, std::string id, DateTime time);
         // 查找试管函数
         pTube FindTube(std::string SerialNumber);
 
     private:
         // 将Admin设为友元类
         friend class Admin;
-        // 声明控制器类为友元，为与文件交换数据
-        friend class ControllerBase;
+        // 将文件加载函数设置为友元函数
+        friend bool User::LoadFile(const char* filename);
         // 将构造函数定义为私有
         Collector() = default;
     };
@@ -164,13 +171,13 @@ public:
         bool RecordTubeStatus(std::string SerialNumber, TestResult result);
 
         // 根据试管结果更新用户结果，在录入试管状态时调用
-        void UpdateRecord(pTube tube);
+        void UpdateRecord(const pTube& tube);
 
     private:
         // 将Admin设为友元类
         friend class Admin;
-        // 声明控制器类为友元，为与文件交换数据
-        friend class ControllerBase;
+        // 将文件加载函数设置为友元函数
+        friend bool User::LoadFile(const char* filename);
 
         // 将构造函数定义为私有
         Recorder() = default;
@@ -185,8 +192,8 @@ public:
     const std::string& Name;
 
 private:
-    // 声明控制器类为友元，为与文件交换数据
-    friend class ControllerBase;
+    // 将试管类声明为友元类使用文件加载
+    friend class Tube;
 
     // 通过ID查找用户，仅供类内使用
     static pUser FindUser(std::string id);

@@ -5,12 +5,18 @@
         <Name>tcy</Name>
         <ID>123456789123456789</ID>
         <EncyptedPassword>202CB962AC59075B964B07152D234B70</EncyptedPassword>
-        <LastTest Result="NEGATIVE">2022 2 2 22 22 22</LastTest>
+        <LastTest Result="NEGATIVE">20220707121212</LastTest>
     </User>
     <User IsAdmin="false" IsCollector="true" IsRecorder="true">
         <Name>zsh</Name>
         <ID>147258369147258369</ID>
         <EncyptedPassword>202CB962AC59075B964B07152D234B70</EncyptedPassword>
-        <LastTest Result="NEGATIVE">2022 2 2 22 22 23</LastTest>
+        <LastTest Result="NEGATIVE">20220707121314</LastTest>
+    </User>
+    <User IsAdmin="false" IsCollector="false" IsRecorder="false">
+        <Name>ssh</Name>
+        <ID>123456789987654321</ID>
+        <EncyptedPassword>202CB962AC59075B964B07152D234B70</EncyptedPassword>
+        <LastTest Result="UNTESTED"/>
     </User>
 </AllUsers>

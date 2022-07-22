@@ -14,6 +14,7 @@
 
 #include "../../controllers/ControllerCommandline.hpp"
 #include <iostream>
+#include <tuple>
 
 // 定义用户智能指针的别名
 class User;
@@ -75,7 +76,7 @@ int main(int argc, const char* argv[]) {
     // 解析数据文件，读入到类的对象中
     std::cout << "---------------------------------------" << std::endl;
     std::cout << "Parsing data files..." << std::endl;
-    if (controller.ParseUserFile(UserFilename)) {
+    if (User::LoadFile(UserFilename)) {
         std::cout << "----Parsing user data files successfully!" << std::endl;
     } else {
         std::cout << "----Parsing user data files failed! \n----There maybe "
@@ -88,7 +89,7 @@ int main(int argc, const char* argv[]) {
                   << std::endl;
     }
 
-    if (controller.ParseTubeFile(TubeFilename)) {
+    if (Tube::LoadFile(TubeFilename)) {
         std::cout << "------Parsing tube data files successfully!" << std::endl;
     } else {
         std::cout
@@ -548,13 +549,11 @@ int main(int argc, const char* argv[]) {
                                 std::cout << "Tube found successfully."
                                           << std::endl;
                                 // 时间日期录入
-                                int year, month, day, hour, minute, second;
-                                std::cout << "Please input time (YYYY MM DD hh "
-                                             "mm ss): ";
-                                std::cin >> year >> month >> day >> hour >>
-                                    minute >> second;
-                                DateTime dateTime(year, month, day, hour,
-                                                  minute, second);
+                                std::string date_str;
+                                std::cout << "Please input time (YYYYMMDDhh"
+                                             "mmss), no blank space pls: ";
+                                std::cin >> date_str;
+                                DateTime dateTime(date_str);
                                 // 获取用户ID
                                 std::string id;
                                 while (true) {
@@ -673,12 +672,12 @@ int main(int argc, const char* argv[]) {
     // 程序退出前将数据写入文件
     std::cout << "---------------------------------------" << std::endl;
     std::cout << "Writing to data files..." << std::endl;
-    if (!controller.SavetoUserFile(UserFilename)) {
+    if (!User::SaveFile(UserFilename)) {
         std::cout << "----User data saved successfully." << std::endl;
     } else {
         std::cout << "----User data saved failed." << std::endl;
     }
-    if (!controller.SavetoTubeFile(TubeFilename)) {
+    if (!Tube::SaveFile(TubeFilename)) {
         std::cout << "----Tube data saved successfully." << std::endl;
     } else {
         std::cout << "----Tube data saved failed." << std::endl;

@@ -22,13 +22,9 @@
 enum class TestResult;
 
 /*************************************************************************
-【类名】ControllerBase
+【类名】ControllerCommandline
 【功能】业务流程派生类类，定义了业务流程的命令行操作
 【接口说明】
-    解析用户文件 ParseUserFile(const char* filename)
-    解析试管文件 ParseTubeFile(const char* filename)
-    保存用户文件 SavetoUserFile(const char* filename)
-    保存试管文件 SavetoTubeFile(const char* filename)
     展示用户权限 ShowUserAuth(const pUser& user) const 获取权限字符串
     展示用户检测结果 ShowUserResult(const pTube& tube) 获取结果字符串
     用户注册 Register(std::string id, std::string name, std::string password)

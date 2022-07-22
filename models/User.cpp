@@ -134,6 +134,149 @@ pUser User::GetUser(std::string id, std::string password) {
 }
 
 /*************************************************************************
+【函数名称】User::LoadFile
+【函数功能】将文件的信息解析到用户列表中
+【参数】filename：文件的相对路径
+【返回值】bool值，是否成功解析文件
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-2
+【更改记录】
+    2022-07-05 由唐春洋完善了类中功能的代码实现
+    2022-07-20 由唐春洋增加注释
+*************************************************************************/
+bool User::LoadFile(const char* filename) {
+    using namespace tinyxml2;
+    if (fopen(filename, "r") == NULL) {
+        return false;
+    } else {
+        fclose(fopen(filename, "r"));
+    }
+    try {
+        // 用TinyXML2解析用户文件
+        XMLDocument doc(true, COLLAPSE_WHITESPACE);
+        doc.LoadFile(filename);
+        if (doc.Error()) {
+            return false;
+        }
+        XMLHandle docHandle(&doc);
+        // 获取子节点信息并加载到User对象中
+        XMLElement* user_child =
+            docHandle.FirstChildElement().FirstChildElement().ToElement();
+        while (user_child) {
+            // 初始化用户姓名、ID、密码
+            std::string ID(user_child->FirstChildElement("ID")->GetText());
+            std::string Name(user_child->FirstChildElement("Name")->GetText());
+            std::string Password = "fake";
+
+            new User(ID, Name, Password);
+            pUser user = User::FindUser(ID);
+            user->m_Password = MD5::FromCipherText(std::string(
+                user_child->FirstChildElement("EncyptedPassword")->GetText()));
+
+            // 初始化用户核酸检测结果
+            std::string result(
+                user_child->FirstChildElement("LastTest")->Attribute("Result"));
+            if (result == "POSITIVE") {
+                user->m_LastResult = TestResult::POSITIVE;
+                user->m_LastTime = DateTime(std::string(
+                    user_child->FirstChildElement("LastTest")->GetText()));
+            } else if (result == "NEGATIVE") {
+                user->m_LastResult = TestResult::NEGATIVE;
+                user->m_LastTime = DateTime(std::string(
+                    user_child->FirstChildElement("LastTest")->GetText()));
+            } else {
+                user->m_LastResult = TestResult::UNTESTED;
+            }
+            // 为用户添加权限信息
+            bool authority = user_child->BoolAttribute("IsAdmin");
+            if (authority) {
+                user->m_pAdmin = new User::Admin;
+            } else {
+                user->m_pAdmin = nullptr;
+            }
+            authority = user_child->BoolAttribute("IsCollector");
+            if (authority) {
+                user->m_pCollector = new User::Collector;
+            } else {
+                user->m_pCollector = nullptr;
+            }
+            authority = user_child->BoolAttribute("IsRecorder");
+            if (authority) {
+                user->m_pRecorder = new User::Recorder;
+            } else {
+                user->m_pRecorder = nullptr;
+            }
+            user_child = user_child->NextSiblingElement();
+        }
+    } catch (...) {
+        return false;
+    }
+
+    return true;
+}
+
+/*************************************************************************
+【函数名称】User::SaveFile
+【函数功能】将用户数据录入到文件中
+【参数】filename：储存试管数据文件的文件名
+【返回值】bool类型：反映保存是否成功
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-2
+【更改记录】
+    2022-07-05 由唐春洋完善了类中功能的代码实现
+    2022-07-20 由唐春洋增加注释
+*************************************************************************/
+bool User::SaveFile(const char* filename) {
+    using namespace tinyxml2;
+    XMLDocument doc(true, COLLAPSE_WHITESPACE);
+    XMLDeclaration* decl =
+        doc.NewDeclaration("xml version=\"1.0\" encoding=\"UTF-8\"");
+    doc.InsertFirstChild(decl);
+    XMLComment* comment = doc.NewComment("This is the user-data-storing file.");
+    doc.InsertEndChild(comment);
+    XMLElement* root = doc.NewElement("AllUsers");
+    doc.InsertEndChild(root);
+    for (auto& user : User::m_AllUsers) {
+        XMLElement* user_child = doc.NewElement("User");
+        root->InsertEndChild(user_child);
+        XMLElement* Name = doc.NewElement("Name");
+        Name->SetText(user->m_Name.c_str());
+        user_child->InsertEndChild(Name);
+        XMLElement* ID = doc.NewElement("ID");
+        ID->SetText(user->m_ID.c_str());
+        user_child->InsertEndChild(ID);
+        XMLElement* EncyptedPassword = doc.NewElement("EncyptedPassword");
+        stringstream ss;
+        ss << user->m_Password;
+        EncyptedPassword->SetText(ss.str().c_str());
+        user_child->InsertEndChild(EncyptedPassword);
+
+        XMLElement* LastTest = doc.NewElement("LastTest");
+
+        std::string str_result;
+        DateTime::SetFormat(true);
+        if (user->m_LastResult == TestResult::POSITIVE) {
+            str_result = "POSITIVE";
+            LastTest->SetText(user->m_LastTime.GetFormatString().c_str());
+        } else if (user->m_LastResult == TestResult::NEGATIVE) {
+            str_result = "NEGATIVE";
+            LastTest->SetText(user->m_LastTime.GetFormatString().c_str());
+        } else {
+            str_result = "UNTESTED";
+        }
+        LastTest->SetAttribute("Result", str_result.c_str());
+        user_child->InsertEndChild(LastTest);
+
+        user_child->SetAttribute("IsAdmin", user->m_pAdmin != nullptr);
+        user_child->SetAttribute("IsCollector", user->m_pCollector != nullptr);
+        user_child->SetAttribute("IsRecorder", user->m_pRecorder != nullptr);
+    }
+    if (doc.SaveFile(filename)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/*************************************************************************
 【函数名称】Admin::ResetPassword
 【函数功能】重置用户密码
 【参数】id：用户id，password：用户密码
@@ -265,7 +408,8 @@ pTube User::Collector::CreateTube(std::string SerialNumber) {
     2022-07-11 由唐春洋完善了类中功能的代码实现
     2022-07-20 由唐春洋增加注释
 *************************************************************************/
-bool User::Collector::CollectUsers(pTube tube, std::string id, DateTime time) {
+bool User::Collector::CollectUsers(const pTube& tube, std::string id,
+                                   DateTime time) {
     pUser temp = User::FindUser(id);
     if (temp == nullptr) {
         return false;
@@ -321,7 +465,7 @@ bool User::Recorder::RecordTubeStatus(std::string SerialNumber,
     2022-07-11 由唐春洋完善了类中功能的代码实现
     2022-07-20 由唐春洋增加注释
 *************************************************************************/
-void User::Recorder::UpdateRecord(pTube tube) {
+void User::Recorder::UpdateRecord(const pTube& tube) {
     using std::begin;
     using std::end;
     for (auto it : tube->m_CollectedUsers) {

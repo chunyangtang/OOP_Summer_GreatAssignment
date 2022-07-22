@@ -19,13 +19,10 @@
 #include "../models/DateTime.hpp"
 #include "../models/Tube.hpp"
 #include "../models/User.hpp"
-#include "../models/tinyxml2.h"
 #include <memory>
-#include <sstream>
 #include <string>
+#include <tuple>
 #include <vector>
-
-using namespace tinyxml2;
 
 // 定义用户智能指针的别名
 class User;
@@ -40,15 +37,10 @@ using pTube = std::shared_ptr<Tube>;
 【类名】ControllerBase
 【功能】业务流程基类，定义了业务流程的基本操作
 【接口说明】
-    解析用户文件 ParseUserFile(const char* filename)
-    解析试管文件 ParseTubeFile(const char* filename)
-    保存用户文件 SavetoUserFile(const char* filename)
-    保存试管文件 SavetoTubeFile(const char* filename)
     展示用户权限 ShowUserAuth(const pUser& user) const 纯虚函数未实现
     展示用户检测结果 ShowUserResult(const pTube& tube) const 纯虚函数未实现
     用户注册 Register(std::string id, std::string name, std::string password)
     用户登录 Login(std::string id, std::string password);
-
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-13
 【更改记录】
     2022-07-13 由唐春洋完善了类中功能的代码实现
@@ -56,14 +48,6 @@ using pTube = std::shared_ptr<Tube>;
 *************************************************************************/
 class ControllerBase {
 public:
-    // 解析已存在的用户文件
-    virtual bool ParseUserFile(const char* filename);
-    // 解析已存在的试管文件
-    virtual bool ParseTubeFile(const char* filename);
-    // 保存程序信息到用户文件
-    virtual bool SavetoUserFile(const char* filename);
-    // 保存程序信息到试管文件
-    virtual bool SavetoTubeFile(const char* filename);
     // 展示用户权限信息
     virtual std::string ShowUserAuth(const pUser& user) const = 0;
     // 展示用户核酸检测结果

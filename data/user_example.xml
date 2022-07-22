@@ -12,7 +12,7 @@
             202CB962AC59075B964B07152D234B70
         </EncyptedPassword>
         <LastTest Result = "NEGATIVE">
-            2021 1 1 12 12 12
+            20210101121212
         </LastTest>
     </User>
     <User IsAdmin = "false" IsCollector = "false" IsRecorder = "false">

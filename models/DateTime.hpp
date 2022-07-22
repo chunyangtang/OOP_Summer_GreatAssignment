@@ -18,6 +18,7 @@
 
 #include "Date.hpp"
 #include "Time.hpp"
+#include <sstream>
 #include <string>
 
 /*************************************************************************
@@ -27,6 +28,7 @@
     构造函数：DateTime(unsigned int Year, unsigned int Month, unsigned int Day,
 unsigned int Hour, unsigned int Minute, unsigned int
 Second)用单独的6个数字构造一个日期时间
+    构造函数：DateTime(std::string str)用一个字符串构造一个日期时间
     拷贝构造函数：DateTime(const DateTime&
 src)拷贝构造DateTime对象
     单独设置时间Time::Set
@@ -59,6 +61,8 @@ public:
     DateTime(unsigned int Year = 1900, unsigned int Month = 1,
              unsigned int Day = 1, unsigned int Hour = 0,
              unsigned int Minute = 0, unsigned int Second = 0);
+    // 从一个长字符串构造日期时间
+    DateTime(std::string str);
     // 拷贝构造函数
     DateTime(const DateTime& src);
 
