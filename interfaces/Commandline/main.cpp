@@ -18,6 +18,7 @@
 // 定义用户智能指针的别名
 class User;
 using pUser = std::shared_ptr<User>;
+
 // 声明TestResult枚举类
 enum class TestResult;
 

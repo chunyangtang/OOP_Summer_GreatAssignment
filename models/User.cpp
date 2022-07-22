@@ -27,7 +27,7 @@ std::vector<pUser> User::m_AllUsers = {};
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-2
 【更改记录】
     2022-07-03 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 User::User(std::string id, std::string name, std::string password)
     : ID(m_ID), Name(m_Name), m_ID(id), m_Name(name) {
@@ -50,7 +50,7 @@ User::User(std::string id, std::string name, std::string password)
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-2
 【更改记录】
     2022-07-03 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 bool User::ResetPassword(std::string oldPassword, std::string newPassword) {
     if (oldPassword == newPassword) {
@@ -73,7 +73,7 @@ bool>的别名，代表Admin、Collector、Recorder权限状态
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-2
 【更改记录】
     2022-07-03 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 UserAuth User::GetStatus() const {
     return std::make_tuple((m_pAdmin != nullptr), (m_pCollector != nullptr),
@@ -89,7 +89,7 @@ DateTime>类型，TestResult为枚举类，代表检测结果，DateTime为时�
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-2
 【更改记录】
     2022-07-03 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 std::pair<TestResult, DateTime> User::GetTestResult() const {
     return std::make_pair(m_LastResult, m_LastTime);
@@ -103,7 +103,7 @@ std::pair<TestResult, DateTime> User::GetTestResult() const {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-2
 【更改记录】
     2022-07-05 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 bool User::HaveUser(std::string id) {
     for (auto user : m_AllUsers) {
@@ -122,7 +122,7 @@ bool User::HaveUser(std::string id) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-2
 【更改记录】
     2022-07-05 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 pUser User::GetUser(std::string id, std::string password) {
     for (auto& user : m_AllUsers) {
@@ -141,7 +141,7 @@ pUser User::GetUser(std::string id, std::string password) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 bool User::Admin::ResetPassword(std::string ID, std::string newPassword) {
     pUser user = User::FindUser(ID);
@@ -161,7 +161,7 @@ bool User::Admin::ResetPassword(std::string ID, std::string newPassword) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 bool User::Admin::DeleteUser(std::string ID) {
     pUser user = User::FindUser(ID);
@@ -184,7 +184,7 @@ bool User::Admin::DeleteUser(std::string ID) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 bool User::Admin::AddRole(std::string ID, std::string role) {
     pUser user = User::FindUser(ID);
@@ -213,7 +213,7 @@ bool User::Admin::AddRole(std::string ID, std::string role) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 bool User::Admin::DeleteRole(std::string ID, std::string role) {
     pUser user = User::FindUser(ID);
@@ -245,7 +245,7 @@ bool User::Admin::DeleteRole(std::string ID, std::string role) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 pTube User::Collector::CreateTube(std::string SerialNumber) {
     if (FindTube(SerialNumber) != nullptr) {
@@ -263,7 +263,7 @@ pTube User::Collector::CreateTube(std::string SerialNumber) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 bool User::Collector::CollectUsers(pTube tube, std::string id, DateTime time) {
     pUser temp = User::FindUser(id);
@@ -283,7 +283,7 @@ bool User::Collector::CollectUsers(pTube tube, std::string id, DateTime time) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 pTube User::Collector::FindTube(std::string SerialNumber) {
     return Tube::FindTube(SerialNumber);
@@ -297,7 +297,7 @@ pTube User::Collector::FindTube(std::string SerialNumber) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 bool User::Recorder::RecordTubeStatus(std::string SerialNumber,
                                       TestResult result) {
@@ -319,7 +319,7 @@ bool User::Recorder::RecordTubeStatus(std::string SerialNumber,
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-11 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 void User::Recorder::UpdateRecord(pTube tube) {
     using std::begin;
@@ -342,7 +342,7 @@ void User::Recorder::UpdateRecord(pTube tube) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-05 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 pUser User::FindUser(std::string id) {
     for (auto user : m_AllUsers) {

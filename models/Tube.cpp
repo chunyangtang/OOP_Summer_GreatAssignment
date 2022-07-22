@@ -26,7 +26,7 @@ std::list<pTube> Tube::m_AllTubes = {};
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-05 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 Tube::Tube(std::string SerialNumber) : m_SerialNumber(SerialNumber) {
     m_TubeResult = TestResult::UNTESTED;
@@ -42,7 +42,7 @@ Tube::Tube(std::string SerialNumber) : m_SerialNumber(SerialNumber) {
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-7-10
 【更改记录】
     2022-07-05 由唐春洋完善了类中功能的代码实现
-    2020-07-20 由唐春洋增加注释
+    2022-07-20 由唐春洋增加注释
 *************************************************************************/
 pTube Tube::FindTube(std::string SerialNumber) {
     for (auto& tube : m_AllTubes) {

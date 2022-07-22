@@ -20,7 +20,6 @@
 #include "../models/Tube.hpp"
 #include "../models/User.hpp"
 #include "../models/tinyxml2.h"
-#include <iostream>
 #include <memory>
 #include <sstream>
 #include <string>

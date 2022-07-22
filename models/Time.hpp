@@ -21,9 +21,22 @@
 【类名】Time
 【功能】时间类，用于构造、储存、操作、输出一个时间
 【接口说明】
-    构造函数：Date(int year, int month, int day)按日期构造Date对象
-    拷贝构造函数：Date(const Date& date)拷贝构造Date对象
-    ......
+    构造函数：Time(unsigned int Hour, unsigned int Minute,
+         unsigned int Second) 以时分秒构造时间
+    拷贝构造函数：Time(const Time &Time)
+    检查给定时分秒是否合法 IsValidTime(unsigned int Hour, unsigned int Minute,
+                            unsigned int Second)
+    检查一个Time对象是否合法 IsValidTime(const Time& time)
+    检查自身是否合法 IsValid()
+    设置时分秒Set(unsigned int Hour, unsigned int Miniute, unsigned int Second)
+    设置小时 SetHour(unsigned int Hour)
+    设置分钟 SetMinute(unsigned int Minute)
+    设置秒 SetSecond(unsigned int Second)
+    设置输出字符串小时制 Set24Hours(bool Is24Hours)
+    设置输出字符串是否带冒号 SetFormat(bool IsRegularFormat)
+    获取自0：0：0的总秒数 Seconds() const
+    获取时间字符串 GetFormatString() const
+    =运算符重载 operator=(const Time &Time)
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
 【更改记录】
     2022-6-29 由唐春洋完善了类中功能的代码实现
@@ -63,7 +76,7 @@ public:
     // 获取格式化的时间字符串
     std::string GetFormatString() const;
 
-    // Operators
+    // =运算符重载，返回自身
     Time& operator=(const Time& src);
 
     // 用于外界访问的常量引用的小时

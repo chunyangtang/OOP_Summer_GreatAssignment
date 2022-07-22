@@ -29,8 +29,39 @@ Day)按年月日设置日期
 Month, unsigned int Day)设置最大最小年份范围
     设置格式函数：SetFormat(const
 string& Format)设置获取的格式化日期字符串格式
-
-
+    判断给定年份是否为闰年 IsLeapYear(unsigned int Year)
+    判断给定的年月日是否符合格式 IsValidDate(unsigned int Year, unsigned int
+Month, unsigned int Day)
+    判断给定的日期是否符合格式 IsValidDate(const Date& date)
+    判断自身是否是闰年 IsLeapYear() const
+    判断自身是否符合格式IsValid() const
+    获取当前日期在今年的天数 DaysInYear() const
+    获取格式化字符串 GetFormatString() const
+    =运算符重载，将右侧的日期赋值给左侧的日期 operator=(const Date& src)
+    +运算符重载，将左侧的日期加上给定的天数，返回新的日期 operator+(const int&
+days) const
+    +=运算符重载， 将自身加上给定的天数，返回自身 operator+=(const int& days)
+    ++运算符重载，先返回自身，再将自身加上1天 operator++()
+    ++运算符重载，先将自身加上1天，再返回自身 operator++(int)
+    !=运算符重载， 判断两个日期是否不同 operator!=(const Date& src) const
+    ==运算符重载， 判断两个日期是否相同 operator==(const Date& src) const
+    -运算符重载， 计算两个日期相差的天数 operator-(const Date& src) const
+    -运算符重载， 将左侧的日期减去给定的天数，返回新的日期 operator-(const int&
+days) const
+    -=运算符重载， 将自身减去给定的天数，返回自身 operator-=(const int& days)
+    --运算符重载， 先返回自身，再将自身减去1天 operator--()
+    --运算符重载， 先将自身减去1天，再返回自身 operator--(int)
+    <运算符重载， 判断左侧的日期是否小于右侧的日期 operator<(const Date& src)
+const
+    >运算符重载， 判断左侧的日期是否大于右侧的日期 operator>(const Date& src)
+const
+    <=运算符重载， 判断左侧的日期是否小于等于右侧的日期 operator<=(const Date&
+src) const
+    >=运算符重载， 判断左侧的日期是否大于等于右侧的日期 operator>=(const Date&
+src) const
+    用于外界访问的常量引用的年 const unsigned int& Year
+    用于外界访问的常量引用的月 const unsigned int& Month
+    用于外界访问的常量引用的日 const unsigned int& Day
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
 【更改记录】
     2022-6-29 由唐春洋完善了类中功能的代码实现

@@ -156,6 +156,16 @@ bool Date::IsLeapYear(const Date& src) {
     return IsLeapYear(src.m_Year);
 }
 
+/*************************************************************************
+【函数名称】Date::IsValidDate
+【函数功能】检查一个年月日是否合法
+【参数】Year：年份，Month：月份，Day：日期
+【返回值】bool型，表示是否合法
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::IsValidDate(unsigned int Year, unsigned int Month,
                        unsigned int Day) {
     if (Year < minimum_Year || Year > maxium_Year) {
@@ -180,10 +190,30 @@ bool Date::IsValidDate(unsigned int Year, unsigned int Month,
     }
 }
 
+/*************************************************************************
+【函数名称】Date::IsValidDate
+【函数功能】检查一个日期是否合法
+【参数】date：日期类对象
+【返回值】bool型，表示是否合法
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::IsValidDate(const Date& date) {
     return IsValidDate(date.m_Year, date.m_Month, date.m_Day);
 }
 
+/*************************************************************************
+【函数名称】Date::IsLeapYear
+【函数功能】检查自身的年份是否为闰年
+【参数】无
+【返回值】bool型，表示是否是闰年
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::IsLeapYear() const {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -191,9 +221,28 @@ bool Date::IsLeapYear() const {
     return IsLeapYear(m_Year);
 }
 
+/*************************************************************************
+【函数名称】Date::IsValid
+【函数功能】检查自身日期是否合法
+【参数】无
+【返回值】bool型，表示是否合法
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::IsValid() const { return IsValidDate(m_Year, m_Month, m_Day); }
 
-// Getters
+/*************************************************************************
+【函数名称】Date::DaysInYear
+【函数功能】获取日期中当年经过的天数
+【参数】无
+【返回值】unsigned int型，表示当年经过的天数
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 unsigned int Date::DaysInYear() const {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -208,6 +257,16 @@ unsigned int Date::DaysInYear() const {
     return days + m_Day;
 }
 
+/*************************************************************************
+【函数名称】Date::GetFormatString
+【函数功能】获取日期的字符串
+【参数】无
+【返回值】string型，表示日期的字符串
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 std::string Date::GetFormatString() const {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -222,7 +281,16 @@ std::string Date::GetFormatString() const {
     return ostr.str();
 }
 
-// Operators
+/*************************************************************************
+【函数名称】Date::operator=
+【函数功能】赋值运算符重载
+【参数】src：Date型源日期
+【返回值】Date型，表示自身的引用
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator=(const Date& src) {
     if (!(IsValidDate(src) && IsValid())) {
         throw std::range_error("Invalid date");
@@ -235,6 +303,16 @@ Date& Date::operator=(const Date& src) {
     return *this;
 }
 
+/*************************************************************************
+【函数名称】Date::operator+
+【函数功能】加号运算符重载
+【参数】days 表示天数的整数
+【返回值】Date型，表示相加后的结果
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator+(const int& days) const {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -248,6 +326,16 @@ Date& Date::operator+(const int& days) const {
     return *temp;
 }
 
+/*************************************************************************
+【函数名称】Date::operator+=
+【函数功能】自增运算符重载
+【参数】days 表示增加天数的整数
+【返回值】Date型，表示相加后自身的引用
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator+=(const int& days) {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -260,6 +348,16 @@ Date& Date::operator+=(const int& days) {
     return *this;
 }
 
+/*************************************************************************
+【函数名称】Date::operator++
+【函数功能】自增运算符重载
+【参数】无
+【返回值】Date型，表示增加一天前的引用
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator++() {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -272,6 +370,16 @@ Date& Date::operator++() {
     return *temp;
 }
 
+/*************************************************************************
+【函数名称】Date::operator++
+【函数功能】自增运算符重载
+【参数】无
+【返回值】Date型，表示增加一天后自身的引用
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator++(int) {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -283,6 +391,16 @@ Date& Date::operator++(int) {
     return *this;
 }
 
+/*************************************************************************
+【函数名称】Date::operator!=
+【函数功能】不等于运算符重载
+【参数】src 表示另一个Date型的对象
+【返回值】bool型，表示两个对象是否不等于
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::operator!=(const Date& src) const {
     if (!(IsValidDate(src) && IsValid())) {
         throw std::range_error("Invalid date");
@@ -290,6 +408,16 @@ bool Date::operator!=(const Date& src) const {
     return !(*this == src);
 }
 
+/*************************************************************************
+【函数名称】Date::operator==
+【函数功能】等于判断运算符重载
+【参数】src 表示另一个Date型的对象
+【返回值】bool型，表示两个对象是否相等
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::operator==(const Date& src) const {
     if (!(IsValidDate(src) && IsValid())) {
         throw std::range_error("Invalid date");
@@ -297,6 +425,16 @@ bool Date::operator==(const Date& src) const {
     return m_Year == src.m_Year && m_Month == src.m_Month && m_Day == src.m_Day;
 }
 
+/*************************************************************************
+【函数名称】Date::operator-
+【函数功能】减法运算符重载
+【参数】src 表示另一个Date型的对象
+【返回值】int型，表示两个对象的日期差
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 int Date::operator-(const Date& src) const {
     if (!(IsValidDate(src) && IsValid())) {
         throw std::range_error("Invalid date");
@@ -314,6 +452,16 @@ int Date::operator-(const Date& src) const {
     return days + DaysInYear() - src.DaysInYear();
 }
 
+/*************************************************************************
+【函数名称】Date::operator-
+【函数功能】减法运算符重载
+【参数】days 表示一个天数
+【返回值】Date型，表示当前日期减去days天后的日期
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator-(const int& days) const {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -324,6 +472,16 @@ Date& Date::operator-(const int& days) const {
     return *this + (-days);
 }
 
+/*************************************************************************
+【函数名称】Date::operator-=
+【函数功能】自减运算符重载
+【参数】days 表示一个天数
+【返回值】Date型，表示当前日期减去days天后自身的引用
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator-=(const int& days) {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -335,6 +493,16 @@ Date& Date::operator-=(const int& days) {
     return *this;
 }
 
+/*************************************************************************
+【函数名称】Date::operator--
+【函数功能】自减运算符重载
+【参数】无
+【返回值】Date型，表示当前日期减去一天前的引用
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator--() {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -347,6 +515,16 @@ Date& Date::operator--() {
     return *temp;
 }
 
+/*************************************************************************
+【函数名称】Date::operator--
+【函数功能】自减运算符重载
+【参数】无
+【返回值】Date型，表示当前日期减去一天后自身的引用
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 Date& Date::operator--(int) {
     if (!IsValid()) {
         throw std::range_error("Invalid date");
@@ -358,6 +536,16 @@ Date& Date::operator--(int) {
     return *this;
 }
 
+/*************************************************************************
+【函数名称】Date::operator<
+【函数功能】小于运算符重载
+【参数】src 表示一个日期
+【返回值】bool型，表示当前日期是否在src之前
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::operator<(const Date& src) const {
     if (!(IsValid() && IsValidDate(src))) {
         throw std::range_error("Invalid date");
@@ -377,6 +565,16 @@ bool Date::operator<(const Date& src) const {
     }
 }
 
+/*************************************************************************
+【函数名称】Date::operator>
+【函数功能】大于运算符重载
+【参数】src 表示一个日期
+【返回值】bool型，表示当前日期是否在src之后
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::operator>(const Date& src) const {
     if (!(IsValid() && IsValidDate(src))) {
         throw std::range_error("Invalid date");
@@ -396,6 +594,16 @@ bool Date::operator>(const Date& src) const {
     }
 }
 
+/*************************************************************************
+【函数名称】Date::operator<=
+【函数功能】小于等于运算符重载
+【参数】src 表示一个日期
+【返回值】bool型，表示当前日期是否在src之前或等于src
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::operator<=(const Date& src) const {
     if (!(IsValid() && IsValidDate(src))) {
         throw std::range_error("Invalid date");
@@ -403,6 +611,16 @@ bool Date::operator<=(const Date& src) const {
     return !(*this > src);
 }
 
+/*************************************************************************
+【函数名称】Date::operator>=
+【函数功能】大于等于运算符重载
+【参数】src 表示一个日期
+【返回值】bool型，表示当前日期是否在src之后或等于src
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 bool Date::operator>=(const Date& src) const {
     if (!(IsValid() && IsValidDate(src))) {
         throw std::range_error("Invalid date");
@@ -410,6 +628,16 @@ bool Date::operator>=(const Date& src) const {
     return !(*this < src);
 }
 
+/*************************************************************************
+【函数名称】Date::DaysToDate
+【函数功能】将一个天数写入本对象当年的日期，本函数会忽略原日期
+【参数】day 表示天数
+【返回值】无
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
+【更改记录】
+    2022-6-29 由唐春洋完善了类中功能的代码实现
+    2020-07-18 由唐春洋增加注释，并为各功能添加了是否符合日期格式的检查
+*************************************************************************/
 void Date::DaysToDate(const int day) {
     int days = day;
     m_Day = 0;
