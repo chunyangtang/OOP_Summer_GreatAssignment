@@ -67,6 +67,8 @@ private:
 
     // 试管编号
     std::string m_SerialNumber;
+    // 试管生产时间
+    DateTime m_ProductionTime;
     // 试管包含的用户与采集时间
     std::vector<std::pair<pwUser, DateTime>> m_CollectedUsers;
 

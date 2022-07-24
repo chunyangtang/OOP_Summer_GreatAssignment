@@ -574,7 +574,8 @@ int main(int argc, const char* argv[]) {
                                     std::cout << "User collected successfully."
                                               << std::endl;
                                 } else {
-                                    std::cout << "User collected failed."
+                                    std::cout << "Invalid test time! User "
+                                                 "collected failed."
                                               << std::endl;
                                 }
                             } else if (k == 3) {

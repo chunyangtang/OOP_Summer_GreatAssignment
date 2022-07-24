@@ -48,6 +48,7 @@ Second)
     判断自身是否合法 IsValid() const
     获取时间日期字符串 GetFormatString() const
     =运算符重载 operator=(const DateTime& src)
+    >=运算符重载 operator>=(const DateTime& src) const
     日期时间的时分秒引用 const unsigned Hour, Minute, Second
     日期类的对象 m_Date
 【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-6-28
@@ -96,6 +97,8 @@ public:
 
     // =运算符重载，返回自身的引用
     DateTime& operator=(const DateTime& src);
+    // >=运算符重载，返回布尔值
+    bool operator>=(const DateTime& src) const;
 
     // 只读访问器，日期时间的时分秒
     const unsigned int& Hour;

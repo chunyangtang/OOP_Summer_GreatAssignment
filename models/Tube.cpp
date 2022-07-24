@@ -140,7 +140,9 @@ bool Tube::SaveFile(const char* filename) {
     2022-07-05 由唐春洋完善了类中功能的代码实现
     2022-07-20 由唐春洋增加注释
 *************************************************************************/
-Tube::Tube(std::string SerialNumber) : m_SerialNumber(SerialNumber) {
+Tube::Tube(std::string SerialNumber)
+    : m_SerialNumber(SerialNumber),
+      m_ProductionTime(DateTime(SerialNumber.substr(0, 14))) {
     m_TubeResult = TestResult::UNTESTED;
     m_AllTubes.push_back(std::make_shared<Tube>(*this));
     m_CollectedUsers.clear();

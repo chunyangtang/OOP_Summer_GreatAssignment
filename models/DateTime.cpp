@@ -264,3 +264,35 @@ DateTime& DateTime::operator=(const DateTime& src) {
     }
     return *this;
 }
+
+/*************************************************************************
+【函数名称】DateTime::operator>=
+【函数功能】比较运算符重载
+【参数】src：源时间日期对象
+【返回值】bool类型，自身对象对应时间是否不在源对象之前
+【开发者及日期】唐春洋(tangcy21@mails.tsinghua.edu.cn) 2022-06-29
+【更改记录】
+    2022-06-29 由唐春洋完善了类中功能的代码实现
+    2022-07-20 由唐春洋增加注释
+*************************************************************************/
+bool DateTime::operator>=(const DateTime& src) const {
+    if (!(IsValidDateTime(src) && IsValid())) {
+        throw std::invalid_argument("Invalid DateTime");
+    }
+    if (m_Date > src.m_Date) {
+        return true;
+    } else if (m_Date == src.m_Date) {
+        if (m_Hour > src.m_Hour) {
+            return true;
+        } else if (m_Hour == src.m_Hour) {
+            if (m_Minute > src.m_Minute) {
+                return true;
+            } else if (m_Minute == src.m_Minute) {
+                if (m_Second >= src.m_Second) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}

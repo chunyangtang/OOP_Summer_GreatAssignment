@@ -394,6 +394,9 @@ pTube User::Collector::CreateTube(std::string SerialNumber) {
     if (FindTube(SerialNumber) != nullptr) {
         return nullptr;
     }
+    if (SerialNumber.size() != 20) {
+        return nullptr;
+    }
     pTube p1(new Tube(SerialNumber));
     return p1;
 }
@@ -413,7 +416,10 @@ bool User::Collector::CollectUsers(const pTube& tube, std::string id,
     pUser temp = User::FindUser(id);
     if (temp == nullptr) {
         return false;
-    } else {
+    } else if (!(time >= tube->m_ProductionTime)) {
+        return false;
+    }
+    {
         tube->m_CollectedUsers.push_back(std::make_pair(temp, time));
         return true;
     }
